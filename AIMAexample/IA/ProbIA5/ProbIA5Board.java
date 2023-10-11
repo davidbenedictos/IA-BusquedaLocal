@@ -1,4 +1,3 @@
-//Este archivo antes se llamaba ProbIA5Board.java
 package IA.ProbIA5;
 
    
