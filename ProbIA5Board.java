@@ -1,6 +1,5 @@
 package IA.ProbIA5;
 
-import java.util.Random;
 
 import IA.Bicing.Estacion;
 import IA.Bicing.Estaciones;
@@ -41,13 +40,13 @@ public class ProbIA5Board {
     private int [] board;
     private static int [] solution;
 
-    private int nbicis;
-    private int nestaciones;
-    private Estaciones estaciones;
-    private int [] vbicis;
+    private static int nbicis;
+    private static int nestaciones;
+    private static Estaciones estaciones;
     private int tipusdemanda;
     private int nfurgos;
     private Ruta [] rutas;
+    private float cost;
 
     /* Constructor */
     public ProbIA5Board(int []init, int[] goal) {
@@ -63,24 +62,12 @@ public class ProbIA5Board {
     }
 
     public ProbIA5Board(Estaciones e, int nb, int nf, int demanda) {
-        //this.board = ;
         estaciones = e;
         nbicis = nb;
         nestaciones = e.size();
         nfurgos = nf;
         tipusdemanda = demanda;
-        vbicis = createRandomvbicis(nb, e.size());
-        //Ruta ruta = new Ruta(e[0], e[1], e[2], 5, 2, 3);
     }
-
-    private int [] createRandomvbicis(int num, int nestaciones) {
-        int[] vbicis = new int[num];
-        Random random = new Random();
-        for (int i = 0; i < num; i++) { // Ejemplo de bucle que genera 10 números aleatorios
-            int numeroAleatorio = random.nextInt(nestaciones + 1); // Genera un número aleatorio de 0 a nestaciones
-            vbicis[i] = numeroAleatorio;
-        }
-        return vbicis;
     }
 
     public int getNBicis() {return(nbicis);}
