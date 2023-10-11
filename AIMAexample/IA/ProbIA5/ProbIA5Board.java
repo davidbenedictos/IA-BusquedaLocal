@@ -9,7 +9,7 @@ import IA.Bicing.Estaciones;
  * Created by bejar on 17/01/17.
  */
 
-public class Estado {
+public class ProbIA5Board {
     /* Class independent from AIMA classes
        - It has to implement the state of the problem and its operators
      *
