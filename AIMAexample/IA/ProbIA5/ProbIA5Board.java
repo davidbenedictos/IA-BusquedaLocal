@@ -1,13 +1,15 @@
+//Este archivo antes se llamaba ProbIA5Board.java
 package IA.ProbIA5;
 
-
+   
+  
 import IA.Bicing.Estacion;
 import IA.Bicing.Estaciones;
 /**
  * Created by bejar on 17/01/17.
  */
 
-public class ProbIA5Board {
+public class Estado {
     /* Class independent from AIMA classes
        - It has to implement the state of the problem and its operators
      *
@@ -37,18 +39,16 @@ public class ProbIA5Board {
         // Métodos getter y setter para los campos si es necesario
     }
 
-    private int [] board;
-    private static int [] solution;
-
     private static int nbicis;
     private static int nestaciones;
     private static Estaciones estaciones;
     private int tipusdemanda;
     private int nfurgos;
-    private Ruta [] rutas;
+    private ArrayList<Ruta> Rutas;
+   // private Ruta [] rutas;
     private float cost;
 
-    /* Constructor */
+    /* Constructor 
     public ProbIA5Board(int []init, int[] goal) {
 
         board = new int[init.length];
@@ -59,7 +59,7 @@ public class ProbIA5Board {
             solution[i] = goal[i];
         }
 
-    }
+    }*/
 
     public ProbIA5Board(Estaciones e, int nb, int nf, int demanda) {
         estaciones = e;
@@ -68,6 +68,8 @@ public class ProbIA5Board {
         nfurgos = nf;
         tipusdemanda = demanda;
     }
+
+    
 
     public int getNBicis() {return(nbicis);}
 
@@ -79,9 +81,21 @@ public class ProbIA5Board {
 
     public Estaciones getEstaciones() {return(estaciones);}
 
+    public int[] getVBicis() {return(vbicis);}
+
+
+
+    public boolean estadoInicial1() {
+        return true;
+    }
+
+
+
+    
     /*!\brief Enseña por pantalla la solucion actual
      *
      */
+    /* 
     public void showState() {
         for(int i = 0; i < nestaciones; ++i) {
             System.out.println("Estacion " + i);
@@ -91,6 +105,7 @@ public class ProbIA5Board {
             System.out.println("Bici " + j + ": " + vbicis[j]);
         }
     }
+    */
 
     /* Heuristic function */
     public double heuristic(){
