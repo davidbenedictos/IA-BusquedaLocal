@@ -1,3 +1,4 @@
+import IA.Bicing.Estaciones;
 import IA.ProbIA5.ProbIA5Board;
 import IA.ProbIA5.ProbIA5GoalTest;
 import IA.ProbIA5.ProbIA5HeuristicFunction;
@@ -19,10 +20,11 @@ public class Main {
          *  For a problem to be solvable:
          *    count(0,prob) % 2 == count(0,sol) %2
          */
-        int [] prob = new int []{1 ,0, 1, 1, 0};
-        int [] sol = new int[]{1, 1, 0, 1, 0};
-
-        ProbIA5Board board = new ProbIA5Board(prob, sol );
+       // int [] prob = new int []{1 ,0, 1, 1, 0};
+       // int [] sol = new int[]{1, 1, 0, 1, 0};
+        Estaciones e = new Estaciones(5, 250, 0, 0);
+        ProbIA5Board board = new ProbIA5Board(e, 250, 30, 0);
+        board.showState();
 
         // Create the Problem object
         Problem p = new  Problem(board,

@@ -2,6 +2,7 @@ package IA.ProbIA5;
 
 import java.util.Random;
 
+import IA.Bicing.Estacion;
 import IA.Bicing.Estaciones;
 /**
  * Created by bejar on 17/01/17.
@@ -16,6 +17,27 @@ public class ProbIA5Board {
         vector with the parity of the coins (we can assume 0 = heads, 1 = tails
      */
 
+     public class Ruta {
+        private Estacion estacionIni;
+        private Estacion estacionFi1;
+        private Estacion estacionFi2;
+        private int nbicisRecogidas;
+        private int nbicisDejadas1;
+        private int nbicisDejadas2;
+
+
+        public Ruta(Estacion e1, Estacion e2, Estacion e3, int n1, int n2, int n3) {
+            this.estacionIni = e1;
+            this.estacionFi1 = e2;
+            this.estacionFi2 = e3;
+            this.nbicisRecogidas = n1;
+            this.nbicisDejadas1 = n2;
+            this.nbicisDejadas2 = n3;
+        }
+
+        // Métodos getter y setter para los campos si es necesario
+    }
+
     private int [] board;
     private static int [] solution;
 
@@ -25,7 +47,7 @@ public class ProbIA5Board {
     private int [] vbicis;
     private int tipusdemanda;
     private int nfurgos;
-    //private Ruta [] rutas;
+    private Ruta [] rutas;
 
     /* Constructor */
     public ProbIA5Board(int []init, int[] goal) {
@@ -48,6 +70,7 @@ public class ProbIA5Board {
         nfurgos = nf;
         tipusdemanda = demanda;
         vbicis = createRandomvbicis(nb, e.size());
+        //Ruta ruta = new Ruta(e[0], e[1], e[2], 5, 2, 3);
     }
 
     private int [] createRandomvbicis(int num, int nestaciones) {
@@ -83,11 +106,6 @@ public class ProbIA5Board {
         for(int j = 0; j < nbicis; ++j) {
             System.out.println("Bici " + j + ": " + vbicis[j]);
         }
-    }
-
-    /* vvvvv TO COMPLETE vvvvv */
-    public void flip_it(int i){
-        // flip the coins i and i + 1
     }
 
     /* Heuristic function */
