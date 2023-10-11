@@ -44,7 +44,7 @@ public class ProbIA5Board {
     private static Estaciones estaciones;
     private int tipusdemanda;
     private int nfurgos;
-    private ArrayList<Ruta> Rutas;
+    //private ArrayList<Ruta> Rutas;
    // private Ruta [] rutas;
     private float cost;
 
@@ -81,7 +81,7 @@ public class ProbIA5Board {
 
     public Estaciones getEstaciones() {return(estaciones);}
 
-    public int[] getVBicis() {return(vbicis);}
+    public float getCost() {return(cost);}
 
 
 
