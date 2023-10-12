@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="AIMAexample">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/AIMAexample/Bicing.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AIMAexample/AIMA.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

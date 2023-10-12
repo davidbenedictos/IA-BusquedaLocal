@@ -24,7 +24,7 @@ public class Main {
        // int [] sol = new int[]{1, 1, 0, 1, 0};
         Estaciones e = new Estaciones(5, 250, 0, 0);
         ProbIA5Board board = new ProbIA5Board(e, 250, 30, 0);
-        board.showState();
+        // board.showState();
 
         // Create the Problem object
         Problem p = new  Problem(board,
