@@ -122,8 +122,9 @@ public class ProbIA5Board {
     //Nova ruta. De momento solo puede tener una estación final
     //Bicis recogidas <= nbicis en e1 && Bicis recogidas <= 30
     public void añadirFurgoneta(Estacion e1, Estacion e2, int bicisRecogidas, int bicisDejadas) {
-        Ruta ruta = new Ruta(e1, e2, bicisRecogidas, bicisDejadas, bicisDejadas);
+        Ruta ruta = new Ruta(e1, e2, bicisRecogidas, bicisDejadas);
         Rutas.add(ruta);
+        modificarCoste(ruta);
     }
 
     //Calcular el coste de una ruta. Supongo que los beneficios restan y los costes suman. Queremos minimizar el coste
@@ -135,8 +136,7 @@ public class ProbIA5Board {
         coste -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
 
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
-        if (bicisNecesarias(ruta.getEstacionInicial()) > 0) coste += ruta.getBicisRecogidas();
-        else coste += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
+        coste += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
     }
     
     //Bicis que faltaran en una estacion
