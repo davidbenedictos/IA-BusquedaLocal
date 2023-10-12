@@ -136,7 +136,7 @@ public class ProbIA5Board {
 
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
         if (bicisNecesarias(ruta.getEstacionInicial()) > 0) coste += ruta.getBicisRecogidas();
-        else coste += min(ruta.getBicisRecogidas(), ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial());
+        else coste += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
     }
     
     //Bicis que faltaran en una estacion
