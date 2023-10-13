@@ -29,11 +29,7 @@ public class ProbIA5Board {
             this.estacionFi2 = null;
             this.nbicisRecogidas = n1;
             this.nbicisDejadas1 = n2;
-<<<<<<< HEAD
             this.nbicisDejadas2 = 0;
-=======
-            this.nbicisDejadas2 = null;
->>>>>>> dda40aa0fc7df887d705d548fdc6a440a4ac383d
         }
 
         public Estacion getEstacionInicial() {
@@ -79,11 +75,7 @@ public class ProbIA5Board {
         nfurgos = nf;
         tipusdemanda = demanda;
         estadoInicial1();
-<<<<<<< HEAD
         coste = 0;
-=======
-        cost = 0;
->>>>>>> dda40aa0fc7df887d705d548fdc6a440a4ac383d
     }
 
     
@@ -142,35 +134,23 @@ public class ProbIA5Board {
         coste += distancia1(ruta)*((ruta.getNBicis() + 9)/10);
 
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
-<<<<<<< HEAD
+
         coste -= Math.min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
 
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
         coste += Math.max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
-=======
-        coste -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
-
-        //Incrementa el coste por cada bici que recojamos por debajo de la demanda
-        coste += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
->>>>>>> dda40aa0fc7df887d705d548fdc6a440a4ac383d
     }
     
     //Bicis que faltaran en una estacion
     public int bicisNecesarias(Estacion e) {
-<<<<<<< HEAD
         return Math.max(0, e.getDemanda() - e.getNumBicicletasNext());
-=======
-        return max(0, e.getDemanda() - e.getNumBicicletasNext());
->>>>>>> dda40aa0fc7df887d705d548fdc6a440a4ac383d
+
     }
 
     //Bicis que sobran en una estacion
     public int bicisSobrantes(Estacion e) {
-<<<<<<< HEAD
         return Math.max(0, e.getNumBicicletasNext() - e.getDemanda());
-=======
-        return max(0, e.getNumBicicletasNext() - e.getDemanda()); 
->>>>>>> dda40aa0fc7df887d705d548fdc6a440a4ac383d
+
     }
 
     //Distancia entre la estacion inicial y la estacion final 1
@@ -185,11 +165,8 @@ public class ProbIA5Board {
 
     //Devuelve la distancia entre las dos estaciones
     public int distanciaEstaciones(Estacion e1, Estacion e2) {
-<<<<<<< HEAD
         return Math.abs(e1.getCoordX() - e2.getCoordX()) + Math.abs(e1.getCoordY() - e2.getCoordY());
-=======
-        return abs(e1.getCoordX() - e2.getCoordX()) + abs(e1.getCoordY() - e2.getCoordY());
->>>>>>> dda40aa0fc7df887d705d548fdc6a440a4ac383d
+
     }
 
 }
