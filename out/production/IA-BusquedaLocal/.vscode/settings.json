@@ -2,6 +2,5 @@
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
         "C:/Users/34696/OneDrive/Escriptori/FIB/IA/IA-BusuedaLocal/AIMAEXAMPLE/*.jar"
-    ],
-    "java.debug.settings.onBuildFailureProceed": true
+    ]
 }
