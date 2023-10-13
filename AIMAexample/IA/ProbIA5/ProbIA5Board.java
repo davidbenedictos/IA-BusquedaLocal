@@ -62,6 +62,7 @@ public class ProbIA5Board {
         public int getBicisDejadas1() {
             return nbicisDejadas1;
         }
+
     }
 
 
@@ -125,6 +126,10 @@ public class ProbIA5Board {
     }
     public float getCoste(){
         return (coste);
+    }
+
+    public void setRutas(ArrayList<Ruta> rutas){
+       Rutas = rutas;
     }
 
     /********************************/
