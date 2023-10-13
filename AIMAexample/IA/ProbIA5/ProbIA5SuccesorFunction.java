@@ -11,12 +11,7 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
         ArrayList retval = new ArrayList();
         ProbIA5Board board = (ProbIA5Board) state;
 
-        // Some code here
-        // (flip all the consecutive pairs of coins and generate new states
-        // Add the states to retval as Succesor("flip i j", new_state)
-        // new_state has to be a copy of state
-
-        return retval;
+        //return ((ProbIA5Board) ArrayList).generarSucesores();
 
     }
 

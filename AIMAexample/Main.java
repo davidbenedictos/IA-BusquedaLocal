@@ -8,6 +8,7 @@ import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
 import aima.search.informed.AStarSearch;
+import aima.search.informed.HillClimbingSearch;
 import aima.search.informed.IterativeDeepeningAStarSearch;
 import java.util.Iterator;
 import java.util.List;
@@ -33,11 +34,11 @@ public class Main {
                                 new ProbIA5HeuristicFunction());
 
         // Instantiate the search algorithm
-	// AStarSearch(new GraphSearch()) or IterativeDeepeningAStarSearch()
-        Search alg = new AStarSearch(new GraphSearch());
+	    // AStarSearch(new GraphSearch()) or IterativeDeepeningAStarSearch()
+        Search search = new HillClimbingSearch();
 
         // Instantiate the SearchAgent object
-        SearchAgent agent = new SearchAgent(p, alg);
+        SearchAgent agent = new SearchAgent(p, search);
 
 	// We print the results of the search
         System.out.println();
