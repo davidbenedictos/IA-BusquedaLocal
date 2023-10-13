@@ -3,6 +3,13 @@ package IA.ProbIA5;
 import IA.Bicing.Estacion;
 import IA.Bicing.Estaciones;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
 
 
 public class ProbIA5Board {    
@@ -58,7 +65,10 @@ public class ProbIA5Board {
     }
 
 
-    //Atributos
+    /*********************/
+    /***** ATRIBUTOS *****/
+    /*********************/
+
     private static int nbicis;
     private static int nestaciones;
     private static Estaciones estaciones;
@@ -78,8 +88,18 @@ public class ProbIA5Board {
         coste = 0;
     }
 
-    
-    //GETTERS
+    /*funció Esther*/
+    public ProbIA5Board(int nbicis, int nestaciones, Estaciones estaciones, int tipusdemanda, int seed){
+        estaciones = new Estaciones(nbicis, nestaciones, tipusdemanda, seed);
+        nfurgos = 1;
+        Rutas =  new ArrayList<>();
+    }
+
+
+    /*********************/
+    /****** GETTERS ******/
+    /*********************/
+
     public int getNBicis() {
         return(nbicis);
     }
@@ -100,11 +120,54 @@ public class ProbIA5Board {
         return(estaciones);
     }
 
+    public ArrayList<Ruta> getRutas(){
+        return Rutas;
+    }
+    public float getCoste(){
+        return (coste);
+    }
+
+    /********************************/
+    /****** ESTADOS INICIALES *******/
+    /********************************/
 
     //La primera solución inicial es un vector de Rutas vacio
     public boolean estadoInicial1() {
         Rutas = new ArrayList<Ruta>();
         return true;
+    }
+
+    /*Estat inicial 2 Esther*/
+    public boolean estadoInicial2() {
+        ordenarEstacionesPorDiferencia(estaciones);
+        List<IA.ProbIA5.Ruta> rutas = new ArrayList<>();
+
+        if (estaciones.size() < 2 || nfurgos > 30) {
+            return true;
+        }
+
+        for (int i = 0; i < estaciones.size() - 1; i++) {
+            Estacion estacionFinal = estaciones.get(i);
+            Estacion estacionInicial = estaciones.get(estaciones.size() - 1);
+            int diferencia = estacionInicial.getNumBicicletasNoUsadas() - estacionInicial.getDemanda();
+
+            IA.ProbIA5.Ruta ruta = new IA.ProbIA5.Ruta(estacionInicial, estacionFinal, diferencia, diferencia);
+            rutas.add(ruta);
+            nfurgos += 1;
+        }
+        return false;
+    }
+
+    /*Funció auxiliar Esther*/
+    public static void ordenarEstacionesPorDiferencia(List<Estacion> estaciones) {
+        Collections.sort(estaciones, new Comparator<Estacion>() {
+            @Override
+            public int compare(Estacion estacion1, Estacion estacion2) {
+                int diferencia1 = estacion1.getNumBicicletasNoUsadas() - estacion1.getDemanda();
+                int diferencia2 = estacion2.getNumBicicletasNoUsadas() - estacion2.getDemanda();
+                return Integer.compare(diferencia1, diferencia2);
+            }
+        });
     }
 
 
@@ -118,7 +181,9 @@ public class ProbIA5Board {
     }
 
 
-    //OPERADORES
+    /*************************/
+    /****** OPERADORES *******/
+    /*************************/
 
     //Nova ruta. De momento solo puede tener una estación final
     //Bicis recogidas <= nbicis en e1 && Bicis recogidas <= 30
@@ -135,21 +200,21 @@ public class ProbIA5Board {
 
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
 
-        coste -= Math.min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
+        coste -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
 
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
-        coste += Math.max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
+        coste += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
     }
     
     //Bicis que faltaran en una estacion
     public int bicisNecesarias(Estacion e) {
-        return Math.max(0, e.getDemanda() - e.getNumBicicletasNext());
+        return max(0, e.getDemanda() - e.getNumBicicletasNext());
 
     }
 
     //Bicis que sobran en una estacion
     public int bicisSobrantes(Estacion e) {
-        return Math.max(0, e.getNumBicicletasNext() - e.getDemanda());
+        return max(0, e.getNumBicicletasNext() - e.getDemanda());
 
     }
 
@@ -165,7 +230,7 @@ public class ProbIA5Board {
 
     //Devuelve la distancia entre las dos estaciones
     public int distanciaEstaciones(Estacion e1, Estacion e2) {
-        return Math.abs(e1.getCoordX() - e2.getCoordX()) + Math.abs(e1.getCoordY() - e2.getCoordY());
+        return abs(e1.getCoordX() - e2.getCoordX()) + abs(e1.getCoordY() - e2.getCoordY());
 
     }
 
