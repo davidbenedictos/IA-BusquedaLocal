@@ -139,21 +139,21 @@ public class ProbIA5Board {
 
     /*Estat inicial 2 Esther*/
     public boolean estadoInicial2() {
-        ordenarEstacionesPorDiferencia(estaciones);
+        ordenarEstacionesPorDiferencia(estaciones.getEstaciones());
         List<Ruta> rutas = new ArrayList<>();
 
         if (estaciones.size() < 2 || nfurgos > 30) {
             return true;
         }
-
         for (int i = 0; i < estaciones.size() - 1; i++) {
             Estacion estacionFinal = estaciones.get(i);
             Estacion estacionInicial = estaciones.get(estaciones.size() - 1);
-            int diferencia = estacionInicial.getNumBicicletasNoUsadas() - estacionInicial.getDemanda();
-
-            Ruta ruta = new Ruta(estacionInicial, estacionFinal, diferencia, diferencia);
-            rutas.add(ruta);
-            nfurgos += 1;
+            int diferencia = estacionFinal.getNumBicicletasNoUsadas() - estacionFinal.getDemanda();
+            if (diferencia > 0){
+                Ruta ruta = new Ruta(estacionInicial, estacionFinal, diferencia, diferencia);
+                rutas.add(ruta);
+                nfurgos += 1;
+            }
         }
         return false;
     }
