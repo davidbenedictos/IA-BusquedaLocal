@@ -28,7 +28,8 @@ public class Main {
         // board.showState();
 
         // Create the Problem object
-        Problem p = new  Problem(board,
+
+         Problem p = new  Problem(board,
                                 new ProbIA5SuccesorFunction(),
                                 new ProbIA5GoalTest(),
                                 new ProbIA5HeuristicFunction());
