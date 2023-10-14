@@ -144,7 +144,7 @@ public class ProbIA5Board {
 
     /*Estat inicial 2 Esther*/
     public boolean estadoInicial2() {
-        ordenarEstacionesPorDiferencia(estaciones.getEstaciones());
+        ordenarEstacionesPorDiferencia(estaciones);
         List<Ruta> rutas = new ArrayList<>();
 
         if (estaciones.size() < 2 || nfurgos > 30) {

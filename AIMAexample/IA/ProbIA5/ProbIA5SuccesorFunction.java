@@ -34,7 +34,8 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                             // Añadir la nueva ruta al sucesor
                             sucesor.añadirFurgoneta(e1, e2, bicisRecogidas, bicisDejadas);
                             // Agregar el sucesor a la lista de sucesores
-                            retval.add(sucesor);
+                            //retval.add(sucesor);
+                            retval.add(new Successor("Furgo añadida", sucesor));
                         }
                     }
                 }
