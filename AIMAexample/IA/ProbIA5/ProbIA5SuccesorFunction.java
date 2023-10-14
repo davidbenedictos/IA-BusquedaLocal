@@ -4,6 +4,8 @@ import IA.Bicing.Estacion;
 import IA.Bicing.Estaciones;
 import aima.search.framework.SuccessorFunction;
 import aima.search.framework.Successor;
+
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +22,12 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
         int nbicis = board.getNBicis();
         int nfurgos = board.getNFurgos();
         int tipusdemanda = board.getDemanda();
-
+        int i = 0;
+        int j = 0;
         for (Estacion e1 : estaciones) {
             for (Estacion e2 : estaciones) {
                 // Evitar la misma estación como estación inicial y final
+                j = 0;
                 if (!e1.equals(e2)) {
                     // Intentar añadir una nueva ruta con diferentes combinaciones de bicicletas recogidas y dejadas
                     for (int bicisRecogidas = 0; bicisRecogidas <= e1.getNumBicicletasNext() && bicisRecogidas <= 30; bicisRecogidas++) {
@@ -35,11 +39,18 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                             sucesor.añadirFurgoneta(e1, e2, bicisRecogidas, bicisDejadas);
                             // Agregar el sucesor a la lista de sucesores
                             //retval.add(sucesor);
-                            retval.add(new Successor("Furgo añadida", sucesor));
+                            //System.out.println("Cuantos participantes hay?");
+                            String S = "Furgo añadido desde estacion i : " + i + " . Hasta estacion j: " + j;
+                            retval.add(new Successor(S, sucesor));
+
                         }
+
+
                     }
                 }
+                ++j;
             }
+            ++i;
         }
         return retval;
     }
