@@ -8,8 +8,15 @@ import aima.search.framework.HeuristicFunction;
 
 public class ProbIA5HeuristicFunction implements HeuristicFunction {
 
-    public double getHeuristicValue(Object n){
+    public boolean equals(Object obj) {
+        boolean retValue;
 
-        return ((ProbIA5Board) n).heuristic();
+        retValue = super.equals(obj);
+        return retValue;
+    }
+
+    public double getHeuristicValue(Object n) {
+        ProbIA5Board estado = (ProbIA5Board) n;
+        return estado.getCoste();
     }
 }

@@ -154,7 +154,7 @@ public class ProbIA5Board {
             Estacion estacionFinal = estaciones.get(i);
             Estacion estacionInicial = estaciones.get(estaciones.size() - 1);
             int diferencia = estacionFinal.getNumBicicletasNoUsadas() - estacionFinal.getDemanda();
-            if (diferencia > 0){
+            if (diferencia > 0) {
                 Ruta ruta = new Ruta(estacionInicial, estacionFinal, diferencia, diferencia);
                 rutas.add(ruta);
                 nfurgos += 1;
@@ -175,17 +175,6 @@ public class ProbIA5Board {
         });
     }
 
-
-    public double heuristic(){
-        return 0;
-    }
-
-    
-    public boolean is_goal(){
-        return false;
-    }
-
-
     /*************************/
     /****** OPERADORES *******/
     /*************************/
@@ -201,14 +190,14 @@ public class ProbIA5Board {
     //Calcular el coste de una ruta. Supongo que los beneficios restan y los costes suman. Queremos minimizar el coste
     public void modificarCoste(final Ruta ruta) {
         //Suma al coste los kilometros de la ruta ponderados por el numero de bicis transportado
-        coste += distancia1(ruta)*((ruta.getNBicis() + 9)/10);
+        coste -= distancia1(ruta)*((ruta.getNBicis() + 9)/10);
 
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
 
-        coste -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
+        coste += min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
 
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
-        coste += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
+        coste -= max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
     }
     
     //Bicis que faltaran en una estacion

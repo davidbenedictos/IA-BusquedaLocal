@@ -21,8 +21,6 @@ public class Main {
          *  For a problem to be solvable:
          *    count(0,prob) % 2 == count(0,sol) %2
          */
-       // int [] prob = new int []{1 ,0, 1, 1, 0};
-       // int [] sol = new int[]{1, 1, 0, 1, 0};
         Estaciones e = new Estaciones(5, 250, 0, 0);
         ProbIA5Board board = new ProbIA5Board(e, 250, 30, 0);
         // board.showState();
@@ -58,8 +56,9 @@ public class Main {
             String property = properties.getProperty(key);
             System.out.println(key + " : " + property);
         }
-        
     }
+
+
     
     private static void printActions(List actions) {
         for (int i = 0; i < actions.size(); i++) {
@@ -67,5 +66,4 @@ public class Main {
             System.out.println(action);
         }
     }
-    
 }
