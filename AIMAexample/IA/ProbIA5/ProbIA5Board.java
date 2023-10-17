@@ -85,8 +85,9 @@ public class ProbIA5Board {
         nestaciones = e.size();
         nfurgos = nf;
         tipusdemanda = demanda;
-        estadoInicial1();
         coste = 0;
+        Rutas = new ArrayList<>();
+        estadoInicial1();
     }
 
     /*funció Esther*/
@@ -227,46 +228,4 @@ public class ProbIA5Board {
         return abs(e1.getCoordX() - e2.getCoordX()) + abs(e1.getCoordY() - e2.getCoordY());
 
     }
-
-    /*************************/
-    /****** SUCESORES *******/
-    /*************************/
-
-    public ArrayList<ProbIA5Board> generarSucesores() {
-        ArrayList<ProbIA5Board> sucesores = new ArrayList<>();
-
-        for (Estacion e1 : estaciones) {
-            for (Estacion e2 : estaciones) {
-                // Evitar la misma estación como estación inicial y final
-                if (e1.equals(e2)) {
-                    continue;
-                }
-
-                // Intentar añadir una nueva ruta con diferentes combinaciones de bicicletas recogidas y dejadas
-                for (int bicisRecogidas = 0; bicisRecogidas <= nbicis; bicisRecogidas++) {
-                    for (int bicisDejadas = 0; bicisDejadas <= nbicis; bicisDejadas++) {
-                        // Verificar que las bicicletas recogidas no excedan el límite en la estación e1
-                        if (bicisRecogidas <= e1.getNumBicicletasNext()) {
-                            // Verificar que las bicicletas dejadas no excedan la demanda en la estación e2
-                            if (bicisDejadas <= e2.getDemanda()) {
-                                // Crear una copia del estado actual y añadir la nueva ruta
-                                ProbIA5Board sucesor = new ProbIA5Board(estaciones, nbicis, nfurgos, tipusdemanda);
-                                sucesor.Rutas.addAll(Rutas); // Copiar las rutas existentes
-
-                                // Añadir la nueva ruta al sucesor
-                                sucesor.añadirFurgoneta(e1, e2, bicisRecogidas, bicisDejadas);
-
-                                // Agregar el sucesor a la lista de sucesores
-                                sucesores.add(sucesor);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return sucesores;
-    }
-
-
 }
