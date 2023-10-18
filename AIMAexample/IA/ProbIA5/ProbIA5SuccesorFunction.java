@@ -30,9 +30,9 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                     for (int bicisRecogidas = 0; bicisRecogidas <= e1.getNumBicicletasNext() && bicisRecogidas <= 30; bicisRecogidas++) {
                         for (int bicisDejadas = 0; bicisDejadas <= bicisRecogidas; bicisDejadas++) {
                             // Crear una copia del estado actual y añadir la nueva ruta
-                            ProbIA5Board sucesor = new ProbIA5Board(board.getEstaciones(), board.getNBicis(), board.getNFurgos(), board.getDemanda(), board.getRutas(), board.getCoste());
+                            ProbIA5Board sucesor = new ProbIA5Board(board.getEstaciones(), board.getNBicis(), board.getNFurgos(), board.getRutas(), board.getCoste()*-1);
                             //ArrayList<>(ProbIA5Board.Ruta) aux = new ArrayList<>(board.getRutas());
-                          //  ArrayList<ProbIA5Board.Ruta> aux = new ArrayList<>(board.getRutas());
+                            //  ArrayList<ProbIA5Board.Ruta> aux = new ArrayList<>(board.getRutas());
                            // sucesor.setRutas(aux); // Copiar las rutas existentes
 
                             // Añadir la nueva ruta al sucesor

@@ -79,22 +79,20 @@ public class ProbIA5Board {
     private float coste;
 
     //CREADORAS
-    public ProbIA5Board(Estaciones e, int nb, int nf, int demanda) {
+    public ProbIA5Board(Estaciones e, int nb, int nf) {
         estaciones = e;
         nbicis = nb;
         nestaciones = e.size();
         nfurgos = nf;
-        tipusdemanda = demanda;
         Rutas = new ArrayList<>();
         coste = 0;
     }
 
-    public ProbIA5Board(Estaciones e, int nb, int nf, int demanda, ArrayList<Ruta> r, float c) {
+    public ProbIA5Board(Estaciones e, int nb, int nf, ArrayList<Ruta> r, float c) {
         estaciones = e;
         nbicis = nb;
         nestaciones = e.size();
         nfurgos = nf;
-        tipusdemanda = demanda;
 
         Rutas = new ArrayList<>(r.size());
         for (int i = 0; i < r.size(); ++i) {
@@ -208,10 +206,10 @@ public class ProbIA5Board {
 
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
 
-        coste += min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
+        coste -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
 
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
-        coste -= max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
+        coste += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
     }
     
     //Bicis que faltaran en una estacion

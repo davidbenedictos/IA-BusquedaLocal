@@ -21,8 +21,8 @@ public class Main {
          *  For a problem to be solvable:
          *    count(0,prob) % 2 == count(0,sol) %2
          */
-        Estaciones e = new Estaciones(5, 250, 0, 0);
-        ProbIA5Board board = new ProbIA5Board(e, 250, 30, 0);
+        Estaciones e = new Estaciones(5, 250, 0, 1);
+        ProbIA5Board board = new ProbIA5Board(e, 250, 30);
         // board.showState();
 
         // Create the Problem object
@@ -31,7 +31,7 @@ public class Main {
                                 new ProbIA5SuccesorFunction(),
                                 new ProbIA5GoalTest(),
                                 new ProbIA5HeuristicFunction());
-        System.out.println("Problem createed");
+        System.out.println("Problem created");
         // Instantiate the search algorithm
 	    // AStarSearch(new GraphSearch()) or IterativeDeepeningAStarSearch()
         Search search = new HillClimbingSearch();
