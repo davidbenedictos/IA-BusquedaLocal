@@ -16,42 +16,41 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
 
         ProbIA5Board board = (ProbIA5Board) state;
 
-        ArrayList<ProbIA5Board> sucesores = new ArrayList<>();
-
-        Estaciones estaciones = board.getEstaciones();
-        int nbicis = board.getNBicis();
-        int nfurgos = board.getNFurgos();
-        int tipusdemanda = board.getDemanda();
+        //ArrayList<ProbIA5Board> sucesores = new ArrayList<>();
+      //  System.out.println(board.getRutas().size());
         int i = 0;
         int j = 0;
-        for (Estacion e1 : estaciones) {
-            for (Estacion e2 : estaciones) {
+        for (Estacion e1 : board.getEstaciones()) {
+            j = 0;
+            for (Estacion e2 : board.getEstaciones()) {
                 // Evitar la misma estación como estación inicial y final
-                j = 0;
+
                 if (!e1.equals(e2)) {
                     // Intentar añadir una nueva ruta con diferentes combinaciones de bicicletas recogidas y dejadas
                     for (int bicisRecogidas = 0; bicisRecogidas <= e1.getNumBicicletasNext() && bicisRecogidas <= 30; bicisRecogidas++) {
                         for (int bicisDejadas = 0; bicisDejadas <= bicisRecogidas; bicisDejadas++) {
                             // Crear una copia del estado actual y añadir la nueva ruta
-                            ProbIA5Board sucesor = new ProbIA5Board(estaciones, nbicis, nfurgos, tipusdemanda);
-                            sucesor.setRutas(board.getRutas()); // Copiar las rutas existentes
+                            ProbIA5Board sucesor = new ProbIA5Board(board.getEstaciones(), board.getNBicis(), board.getNFurgos(), board.getDemanda(), board.getRutas(), board.getCoste());
+                            //ArrayList<>(ProbIA5Board.Ruta) aux = new ArrayList<>(board.getRutas());
+                          //  ArrayList<ProbIA5Board.Ruta> aux = new ArrayList<>(board.getRutas());
+                           // sucesor.setRutas(aux); // Copiar las rutas existentes
+
                             // Añadir la nueva ruta al sucesor
                             sucesor.añadirFurgoneta(e1, e2, bicisRecogidas, bicisDejadas);
                             // Agregar el sucesor a la lista de sucesores
-                            //retval.add(sucesor);
-                            //System.out.println("Cuantos participantes hay?");
-                            String S = "Furgo añadido desde estacion i : " + i + " . Hasta estacion j: " + j;
+
+
+                            String S = "Furgo añadido desde estacion i : " + i + " . Hasta estacion j: " + j + " con coste: "+ sucesor.getCoste() + " " + sucesor.getRutas().size();
                             retval.add(new Successor(S, sucesor));
 
                         }
-
-
                     }
                 }
                 ++j;
             }
             ++i;
         }
+       // System.out.println(board.getRutas().size());
         return retval;
     }
 }

@@ -17,7 +17,7 @@ public class ProbIA5HeuristicFunction implements HeuristicFunction {
 
     public double getHeuristicValue(Object n) {
         ProbIA5Board estado = (ProbIA5Board) n;
-       // System.out.println(estado.getCoste());
+       //System.out.println(estado.getCoste());
         return estado.getCoste();
     }
 }

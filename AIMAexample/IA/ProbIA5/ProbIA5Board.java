@@ -85,8 +85,22 @@ public class ProbIA5Board {
         nestaciones = e.size();
         nfurgos = nf;
         tipusdemanda = demanda;
-        estadoInicial1();
+        Rutas = new ArrayList<>();
         coste = 0;
+    }
+
+    public ProbIA5Board(Estaciones e, int nb, int nf, int demanda, ArrayList<Ruta> r, float c) {
+        estaciones = e;
+        nbicis = nb;
+        nestaciones = e.size();
+        nfurgos = nf;
+        tipusdemanda = demanda;
+
+        Rutas = new ArrayList<>(r.size());
+        for (int i = 0; i < r.size(); ++i) {
+            Rutas.add(r.get(i));
+        }
+        coste = c;
     }
 
     /*funció Esther*/
@@ -129,7 +143,7 @@ public class ProbIA5Board {
     }
 
     public void setRutas(ArrayList<Ruta> rutas){
-       Rutas = rutas;
+        Rutas = new ArrayList<>(rutas);
     }
 
     /********************************/
@@ -190,7 +204,7 @@ public class ProbIA5Board {
     //Calcular el coste de una ruta. Supongo que los beneficios restan y los costes suman. Queremos minimizar el coste
     public void modificarCoste(final Ruta ruta) {
         //Suma al coste los kilometros de la ruta ponderados por el numero de bicis transportado
-        coste -= distancia1(ruta)*((ruta.getNBicis() + 9)/10);
+        //coste -= distancia1(ruta)*((ruta.getNBicis() + 9)/10);
 
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
 
@@ -231,42 +245,6 @@ public class ProbIA5Board {
     /*************************/
     /****** SUCESORES *******/
     /*************************/
-
-    public ArrayList<ProbIA5Board> generarSucesores() {
-        ArrayList<ProbIA5Board> sucesores = new ArrayList<>();
-
-        for (Estacion e1 : estaciones) {
-            for (Estacion e2 : estaciones) {
-                // Evitar la misma estación como estación inicial y final
-                if (e1.equals(e2)) {
-                    continue;
-                }
-
-                // Intentar añadir una nueva ruta con diferentes combinaciones de bicicletas recogidas y dejadas
-                for (int bicisRecogidas = 0; bicisRecogidas <= nbicis; bicisRecogidas++) {
-                    for (int bicisDejadas = 0; bicisDejadas <= nbicis; bicisDejadas++) {
-                        // Verificar que las bicicletas recogidas no excedan el límite en la estación e1
-                        if (bicisRecogidas <= e1.getNumBicicletasNext()) {
-                            // Verificar que las bicicletas dejadas no excedan la demanda en la estación e2
-                            if (bicisDejadas <= e2.getDemanda()) {
-                                // Crear una copia del estado actual y añadir la nueva ruta
-                                ProbIA5Board sucesor = new ProbIA5Board(estaciones, nbicis, nfurgos, tipusdemanda);
-                                sucesor.Rutas.addAll(Rutas); // Copiar las rutas existentes
-
-                                // Añadir la nueva ruta al sucesor
-                                sucesor.añadirFurgoneta(e1, e2, bicisRecogidas, bicisDejadas);
-
-                                // Agregar el sucesor a la lista de sucesores
-                                sucesores.add(sucesor);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return sucesores;
-    }
 
 
 }
