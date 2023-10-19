@@ -73,7 +73,6 @@ public class ProbIA5Board {
     private static int nbicis;
     private static int nestaciones;
     private static Estaciones estaciones;
-    private int tipusdemanda;
     private int nfurgos;
     private ArrayList<Ruta> Rutas;
     private float coste;
@@ -123,10 +122,6 @@ public class ProbIA5Board {
 
     public int getNFurgos() {
         return(nfurgos);
-    }
-
-    public int getDemanda() {
-        return(tipusdemanda);
     }
 
     public Estaciones getEstaciones() {
@@ -259,10 +254,4 @@ public class ProbIA5Board {
         return abs(e1.getCoordX() - e2.getCoordX()) + abs(e1.getCoordY() - e2.getCoordY());
 
     }
-
-    /*************************/
-    /****** SUCESORES *******/
-    /*************************/
-
-
 }
