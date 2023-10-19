@@ -152,7 +152,8 @@ public class ProbIA5Board {
     /*Estat inicial 2 Esther*/
     public boolean estadoInicial2() {
         ordenarEstacionesPorDiferencia(estaciones);
-        List<Ruta> rutas = new ArrayList<>();
+        //List<Ruta> rutas = new ArrayList<>();
+        Rutas = new ArrayList<>();
 
         if (estaciones.size() < 2 || nfurgos > 30) {
             return true;
@@ -163,7 +164,7 @@ public class ProbIA5Board {
             int diferencia = estacionFinal.getNumBicicletasNoUsadas() - estacionFinal.getDemanda();
             if (diferencia > 0) {
                 Ruta ruta = new Ruta(estacionInicial, estacionFinal, diferencia, diferencia);
-                rutas.add(ruta);
+                Rutas.add(ruta);
                 nfurgos += 1;
             }
         }
@@ -199,10 +200,12 @@ public class ProbIA5Board {
 
     //Calcular el coste de una ruta. Supongo que los beneficios restan y los costes suman. Queremos minimizar el coste
     public void modificarCoste(Ruta ruta) {
-        //Suma al coste los kilometros de la ruta ponderados por el numero de bicis transportado
-        //coste += distancia1(ruta)*((ruta.getNBicis() + 9)/10);
-
         int modificacion = 0;
+
+        //Suma al coste los kilometros de la ruta ponderados por el numero de bicis transportado
+        modificacion += distancia1(ruta)*((ruta.getNBicis() + 9)/10);
+
+
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
         modificacion -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
 
@@ -219,9 +222,14 @@ public class ProbIA5Board {
         System.out.println("Bicicletas recogidas: " + ruta.getBicisRecogidas());
         System.out.println("Bicicletas dejadas: " + ruta.getBicisDejadas1());*/
         System.out.println("El coste se modifica en: " + modificacion);
-        System.out.println("Numero de furgos totales" + Rutas.size());
+        System.out.println("Numero de furgos totales " + Rutas.size());
         coste += modificacion;
         System.out.println("");
+    }
+
+    public void cambiarEstacionInicial(Ruta r1, Estacion e1) {
+        r1.estacionIni = e1;
+        System.out.println("Estacion Inicial cambiada");
     }
 
 
