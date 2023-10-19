@@ -9,48 +9,40 @@ import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.max;
+
 public class ProbIA5SuccesorFunction implements SuccessorFunction{
+    public ArrayList getSuccessors(Object state) {
+        ArrayList retval = new ArrayList<ProbIA5Board>();
+        ProbIA5Board padre = (ProbIA5Board) state;
 
-    public List getSuccessors(Object state) {
-        List retval = new ArrayList();
+        for (Estacion e1 : padre.getEstaciones()) {
+            for (Estacion e2 : padre.getEstaciones()) {
+                if (!e1.equals(e2) && padre.getNRutas() <= padre.getNFurgos()) {
+                    /*
+                    for (int bicisR = 0; bicisR < e1.getNumBicicletasNext() - e1.getDemanda(); ++bicisR) {
+                        for (int bicisD = 0; bicisD <= bicisR && bicisD < e2.getDemanda() - e2.getNumBicicletasNext(); ++bicisD) {
+                    */
+                    for (int bicisR = 0; bicisR < e1.getNumBicicletasNext() && bicisR < 30; ++bicisR) {
+                        for (int bicisD = 0; bicisD < bicisR; ++bicisD) {
+                            ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getCoste());
 
-        ProbIA5Board board = (ProbIA5Board) state;
-
-        //ArrayList<ProbIA5Board> sucesores = new ArrayList<>();
-      //  System.out.println(board.getRutas().size());
-        int i = 0;
-        int j = 0;
-        for (Estacion e1 : board.getEstaciones()) {
-            j = 0;
-            for (Estacion e2 : board.getEstaciones()) {
-                // Evitar la misma estación como estación inicial y final
-
-                if (!e1.equals(e2)) {
-                    // Intentar añadir una nueva ruta con diferentes combinaciones de bicicletas recogidas y dejadas
-                    for (int bicisRecogidas = 0; bicisRecogidas <= e1.getNumBicicletasNext() && bicisRecogidas <= 30; bicisRecogidas++) {
-                        for (int bicisDejadas = 0; bicisDejadas <= bicisRecogidas; bicisDejadas++) {
-                            // Crear una copia del estado actual y añadir la nueva ruta
-                            ProbIA5Board sucesor = new ProbIA5Board(board.getEstaciones(), board.getNBicis(), board.getNFurgos(), board.getRutas(), board.getCoste()*-1);
-                            //ArrayList<>(ProbIA5Board.Ruta) aux = new ArrayList<>(board.getRutas());
-                            //  ArrayList<ProbIA5Board.Ruta> aux = new ArrayList<>(board.getRutas());
-                           // sucesor.setRutas(aux); // Copiar las rutas existentes
-
-                            // Añadir la nueva ruta al sucesor
-                            sucesor.añadirFurgoneta(e1, e2, bicisRecogidas, bicisDejadas);
-                            // Agregar el sucesor a la lista de sucesores
-
-
-                            String S = "Furgo añadido desde estacion i : " + i + " . Hasta estacion j: " + j + " con coste: "+ sucesor.getCoste() + " " + sucesor.getRutas().size();
-                            retval.add(new Successor(S, sucesor));
-
+                            sucesor.añadirFurgoneta(e1, e2, bicisR, bicisD);
+                            retval.add(new Successor("Furgoneta añadida", sucesor));
                         }
                     }
+
+                    /*
+                    if (e1.getNumBicicletasNext() - e1.getDemanda() > 0) {
+                        ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getCoste());
+                        int bicisRecogidas = e1.getNumBicicletasNext() - e1.getDemanda();
+                        sucesor.añadirFurgoneta(e1, e2, bicisRecogidas, bicisRecogidas);
+                        retval.add(new Successor("Furgoneta añadida", sucesor));
+
+                    }*/
                 }
-                ++j;
             }
-            ++i;
         }
-       // System.out.println(board.getRutas().size());
         return retval;
     }
 }

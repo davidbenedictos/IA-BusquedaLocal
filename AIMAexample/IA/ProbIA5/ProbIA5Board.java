@@ -136,9 +136,9 @@ public class ProbIA5Board {
     public ArrayList<Ruta> getRutas(){
         return Rutas;
     }
-    public float getCoste(){
-        return (coste);
-    }
+    public float getCoste(){ return coste; }
+
+    public int getNRutas() { return Rutas.size(); };
 
     public void setRutas(ArrayList<Ruta> rutas){
         Rutas = new ArrayList<>(rutas);
@@ -194,23 +194,43 @@ public class ProbIA5Board {
     //Nova ruta. De momento solo puede tener una estación final
     //Bicis recogidas <= nbicis en e1 && Bicis recogidas <= 30
     public void añadirFurgoneta(Estacion e1, Estacion e2, int bicisRecogidas, int bicisDejadas) {
-        Ruta ruta = new Ruta(e1, e2, bicisRecogidas, bicisDejadas);
-        Rutas.add(ruta);
-        modificarCoste(ruta);
+        Ruta rutaNueva = new Ruta(e1, e2, bicisRecogidas, bicisDejadas);
+        //System.out.println("Coste antes de la nueva ruta: " + coste);
+        modificarCoste(rutaNueva);
+
+        Rutas.add(rutaNueva);
+        //System.out.println("Nuevo coste: " + coste);
     }
 
     //Calcular el coste de una ruta. Supongo que los beneficios restan y los costes suman. Queremos minimizar el coste
-    public void modificarCoste(final Ruta ruta) {
+    public void modificarCoste(Ruta ruta) {
         //Suma al coste los kilometros de la ruta ponderados por el numero de bicis transportado
-        //coste -= distancia1(ruta)*((ruta.getNBicis() + 9)/10);
+        //coste += distancia1(ruta)*((ruta.getNBicis() + 9)/10);
 
+        int modificacion = 0;
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
-
-        coste -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
+        modificacion -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
 
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
-        coste += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
+
+        modificacion += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
+
+
+
+
+        /*System.out.println("Modificamos el coste de verdad");
+        System.out.println("Bicicletas sobrantes: " + bicisSobrantes(ruta.getEstacionInicial()));
+        System.out.println("Bicicletas necesarias: " + bicisNecesarias(ruta.getEstacionFinal1()));
+        System.out.println("Bicicletas recogidas: " + ruta.getBicisRecogidas());
+        System.out.println("Bicicletas dejadas: " + ruta.getBicisDejadas1());*/
+        System.out.println("El coste se modifica en: " + modificacion);
+        System.out.println("Numero de furgos totales" + Rutas.size());
+        coste += modificacion;
+        System.out.println("");
     }
+
+
+
     
     //Bicis que faltaran en una estacion
     public int bicisNecesarias(Estacion e) {
@@ -229,7 +249,7 @@ public class ProbIA5Board {
         return distanciaEstaciones(ruta.getEstacionInicial(), ruta.getEstacionFinal1());
     }
 
-    ////Distancia entre la estacion inicial y la estacion final 1
+    ////Distancia entre la estacion final 1 y la estacion final 2
     /*public int distancia2(final Ruta ruta) {
         return distanciaEstaciones(ruta.getEstacionFinal1(), ruta.getEstacionFinal2());
     }*/
