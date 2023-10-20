@@ -21,8 +21,8 @@ public class Main {
          *  For a problem to be solvable:
          *    count(0,prob) % 2 == count(0,sol) %2
          */
-        Estaciones e = new Estaciones(5, 250, 0, 1);
-        ProbIA5Board board = new ProbIA5Board(e, 250, 30);
+        Estaciones e = new Estaciones(25, 1250, 0, 1);
+        ProbIA5Board board = new ProbIA5Board(e, 1250, 5);
         // board.showState();
 
         // Create the Problem object

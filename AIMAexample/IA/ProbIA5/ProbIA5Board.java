@@ -21,6 +21,8 @@ public class ProbIA5Board {
         private int nbicisDejadas1;
         private int nbicisDejadas2;
 
+        private int costeRuta;
+
         public Ruta(Estacion e1, Estacion e2, Estacion e3, int n1, int n2, int n3) {
             this.estacionIni = e1;
             this.estacionFi1 = e2;
@@ -28,6 +30,7 @@ public class ProbIA5Board {
             this.nbicisRecogidas = n1;
             this.nbicisDejadas1 = n2;
             this.nbicisDejadas2 = n3;
+            costeRuta = 0;
         }
 
         public Ruta(Estacion e1, Estacion e2, int n1, int n2) {
@@ -63,7 +66,14 @@ public class ProbIA5Board {
             return nbicisDejadas1;
         }
 
-    }
+       public int getCosteRuta() {
+           return costeRuta;
+       }
+
+       public void setCosteRuta(int costeRuta) {
+           this.costeRuta = costeRuta;
+       }
+   }
 
 
     /*********************/
@@ -100,12 +110,7 @@ public class ProbIA5Board {
         coste = c;
     }
 
-    /*funció Esther*/
-    public ProbIA5Board(int nbicis, int nestaciones, Estaciones estaciones, int tipusdemanda, int seed){
-        estaciones = new Estaciones(nbicis, nestaciones, tipusdemanda, seed);
-        nfurgos = 1;
-        Rutas =  new ArrayList<>();
-    }
+
 
 
     /*********************/
@@ -149,7 +154,7 @@ public class ProbIA5Board {
         return true;
     }
 
-    /*Estat inicial 2 Esther*/
+
     public boolean estadoInicial2() {
         ordenarEstacionesPorDiferencia(estaciones);
         //List<Ruta> rutas = new ArrayList<>();
@@ -200,21 +205,20 @@ public class ProbIA5Board {
 
     //Calcular el coste de una ruta. Supongo que los beneficios restan y los costes suman. Queremos minimizar el coste
     public void modificarCoste(Ruta ruta) {
-        int modificacion = 0;
+        coste -= ruta.getCosteRuta();
+        ruta.setCosteRuta(0);
+
+        int c = 0;
 
         //Suma al coste los kilometros de la ruta ponderados por el numero de bicis transportado
-        //modificacion += distancia1(ruta)*((ruta.getNBicis() + 9)/10);
+        //c += distancia1(ruta)*((ruta.getNBicis() + 9)/10);
 
 
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
-        modificacion -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
-
-        //afegit per uri bene nose si esta be ho deixo comentat
-        //modificacion += max(0, ruta.getBicisDejadas1() - (bicisNecesarias(ruta.getEstacionFinal1())));
+        c -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
 
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
-
-        modificacion += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
+        c += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
 
 
 
@@ -223,11 +227,12 @@ public class ProbIA5Board {
         System.out.println("Bicicletas sobrantes: " + bicisSobrantes(ruta.getEstacionInicial()));
         System.out.println("Bicicletas necesarias: " + bicisNecesarias(ruta.getEstacionFinal1()));
         System.out.println("Bicicletas recogidas: " + ruta.getBicisRecogidas());
-        System.out.println("Bicicletas dejadas: " + ruta.getBicisDejadas1());*/
+        System.out.println("Bicicletas dejadas: " + ruta.getBicisDejadas1());
         System.out.println("El coste se modifica en: " + modificacion);
-        System.out.println("Numero de furgos totales " + Rutas.size());
-        coste += modificacion;
-        System.out.println("");
+        System.out.println("Numero de furgos totales " + Rutas.size());*/
+        coste += c;
+        ruta.setCosteRuta(c);
+        //System.out.println("");
     }
 
     public void cambiarEstacionInicial(Ruta r1, Estacion e1) {
