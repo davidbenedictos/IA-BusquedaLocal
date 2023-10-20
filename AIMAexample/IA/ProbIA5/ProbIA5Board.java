@@ -209,7 +209,8 @@ public class ProbIA5Board {
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
         modificacion -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
 
-        modificacion += max(0, ruta.getBicisDejadas1() - (bicisNecesarias(ruta.getEstacionFinal1())));
+        //afegit per uri bene nose si esta be ho deixo comentat
+        //modificacion += max(0, ruta.getBicisDejadas1() - (bicisNecesarias(ruta.getEstacionFinal1())));
 
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
 
