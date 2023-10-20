@@ -161,7 +161,7 @@ public class ProbIA5Board {
         for (int i = 0; i < estaciones.size() - 1; i++) {
             Estacion estacionFinal = estaciones.get(i);
             Estacion estacionInicial = estaciones.get(estaciones.size() - 1);
-            int diferencia = estacionFinal.getNumBicicletasNoUsadas() - estacionFinal.getDemanda();
+            int diferencia = estacionFinal.getNumBicicletasNext() - estacionFinal.getDemanda();
             if (diferencia > 0) {
                 Ruta ruta = new Ruta(estacionInicial, estacionFinal, diferencia, diferencia);
                 Rutas.add(ruta);
@@ -203,11 +203,13 @@ public class ProbIA5Board {
         int modificacion = 0;
 
         //Suma al coste los kilometros de la ruta ponderados por el numero de bicis transportado
-        modificacion += distancia1(ruta)*((ruta.getNBicis() + 9)/10);
+        //modificacion += distancia1(ruta)*((ruta.getNBicis() + 9)/10);
 
 
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
         modificacion -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
+
+        modificacion += max(0, ruta.getBicisDejadas1() - (bicisNecesarias(ruta.getEstacionFinal1())));
 
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
 
@@ -229,7 +231,20 @@ public class ProbIA5Board {
 
     public void cambiarEstacionInicial(Ruta r1, Estacion e1) {
         r1.estacionIni = e1;
+        modificarCoste(r1);
         System.out.println("Estacion Inicial cambiada");
+    }
+
+    public void cambiarEstacionFinal(Ruta r1, Estacion e1) {
+        r1.estacionFi1 = e1;
+        modificarCoste(r1);
+        System.out.println("EStacion Final Cambiada");
+    }
+
+    public void añadirEstacionFinal2(Ruta r1, Estacion e2) {
+        r1.estacionFi2 = e2;
+        modificarCoste(r1);
+        System.out.println("Estacion Final 2 Añadida");
     }
 
 
@@ -261,5 +276,15 @@ public class ProbIA5Board {
     public int distanciaEstaciones(Estacion e1, Estacion e2) {
         return abs(e1.getCoordX() - e2.getCoordX()) + abs(e1.getCoordY() - e2.getCoordY());
 
+    }
+
+    public int getBicisMal() {
+        int valor = 0;
+        for (Ruta r1: Rutas) {
+            int aux = r1.getEstacionFinal1().getDemanda();
+            int aux2 = r1.nbicisDejadas1;
+            valor += aux2 - aux;
+        }
+        return min(0, valor);
     }
 }

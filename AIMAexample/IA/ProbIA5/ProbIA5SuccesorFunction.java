@@ -12,7 +12,6 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
     public ArrayList getSuccessors(Object state) {
         ArrayList retval = new ArrayList<ProbIA5Board>();
         ProbIA5Board padre = (ProbIA5Board) state;
-
         for (Estacion e1 : padre.getEstaciones()) {
             for (Estacion e2 : padre.getEstaciones()) {
                 if (!e1.equals(e2) && padre.getNRutas() <= padre.getNFurgos()) {
@@ -27,6 +26,7 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                 }
             }
         }
+
         for (ProbIA5Board.Ruta r1: padre.getRutas()) {
             for (Estacion e1 : padre.getEstaciones()) {
                 if (!e1.equals(r1.getEstacionInicial())) {
@@ -37,6 +37,29 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                 }
             }
         }
+
+        for (ProbIA5Board.Ruta r1: padre.getRutas()) {
+            for (Estacion e1 : padre.getEstaciones()) {
+                if (!e1.equals(r1.getEstacionInicial())) {
+                    ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getCoste());
+
+                    sucesor.cambiarEstacionFinal(r1,e1);
+                    retval.add(new Successor("Estación final cambiada", sucesor));
+                }
+            }
+        }
+
+        for (ProbIA5Board.Ruta r1: padre.getRutas()) {
+            for (Estacion e1 : padre.getEstaciones()) {
+                if (!e1.equals(r1.getEstacionInicial())) {
+                    ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getCoste());
+
+                    sucesor.añadirEstacionFinal2(r1,e1);
+                    retval.add(new Successor("Estación final 2 añadida", sucesor));
+                }
+            }
+        }
+        System.out.println(padre.getRutas().size() + "numero rutas padre");
         return retval;
     }
 }
