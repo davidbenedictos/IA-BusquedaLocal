@@ -30,12 +30,10 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
         for (ProbIA5Board.Ruta r1: padre.getRutas()) {
             for (Estacion e1 : padre.getEstaciones()) {
                 if (!e1.equals(r1.getEstacionInicial()) && !e1.equals(r1.getEstacionFinal1())) {
-                    if (r1.getEstacionFinal2() != null &&  !e1.equals(r1.getEstacionFinal2())) {
                         ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getCoste());
 
                         sucesor.cambiarEstacionInicial(r1, e1);
                         retval.add(new Successor("Estación inicial cambiada", sucesor));
-                    }
                 }
             }
         }
@@ -43,12 +41,10 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
         for (ProbIA5Board.Ruta r1: padre.getRutas()) {
             for (Estacion e1 : padre.getEstaciones()) {
                 if (!e1.equals(r1.getEstacionInicial()) && !e1.equals(r1.getEstacionFinal1())) {
-                    if (r1.getEstacionFinal2() != null &&  !e1.equals(r1.getEstacionFinal2())) {
                         ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getCoste());
 
                         sucesor.cambiarEstacionFinal(r1, e1);
                         retval.add(new Successor("Estación final cambiada", sucesor));
-                    }
                 }
             }
         }
