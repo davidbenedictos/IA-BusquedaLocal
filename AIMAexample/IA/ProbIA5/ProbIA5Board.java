@@ -7,9 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
+import static java.lang.Math.*;
 
 
 public class ProbIA5Board {    
@@ -58,20 +56,40 @@ public class ProbIA5Board {
             return nbicisRecogidas;
         }
 
-        public int getBicisRecogidas() {
-            return nbicisRecogidas;
-        }
+        public int getBicisRecogidas() {return nbicisRecogidas;}
+
+
 
         public int getBicisDejadas1() {
             return nbicisDejadas1;
         }
 
-       public int getCosteRuta() {
+       public int getBicisDejadas2() {
+           return nbicisDejadas2;
+       }
+
+        public int getCosteRuta() {
            return costeRuta;
        }
 
        public void setCosteRuta(int costeRuta) {
            this.costeRuta = costeRuta;
+       }
+
+       public void setEstacionIni(Estacion e1) {
+            estacionIni = e1;
+       }
+
+       public void setEstacionFi1(Estacion e2) {
+           estacionFi1 = e2;
+       }
+
+       public void setEstacionFi2(Estacion e3) {
+            estacionFi2 = e3;
+       }
+
+       public void setNbicisDejadas2(int b) {
+            nbicisDejadas2 = b;
        }
    }
 
@@ -105,9 +123,15 @@ public class ProbIA5Board {
 
         Rutas = new ArrayList<>(r.size());
         for (int i = 0; i < r.size(); ++i) {
-            Rutas.add(r.get(i));
+            Rutas.add(copiarRuta(r.get(i)));
         }
         coste = c;
+    }
+
+    private Ruta copiarRuta(Ruta r) {
+        Ruta nuevaRuta = new Ruta(r.getEstacionInicial(), r.getEstacionFinal1(), r.getEstacionFinal2(),
+                r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2());
+        return nuevaRuta;
     }
 
 
@@ -123,6 +147,13 @@ public class ProbIA5Board {
 
     public int getNEstaciones() {
         return(nestaciones);
+    }
+
+    //Torna una estacio random diferent a e1 i e2
+    public Estacion getEstacionRandom(Estacion e1, Estacion e2) {
+        Estacion randomE = getEstaciones().get(((int) random())%nestaciones);
+        if (!randomE.equals(e1) && !randomE.equals(e2)) return randomE;
+        else return getEstacionRandom(e1, e2);
     }
 
     public int getNFurgos() {
@@ -194,8 +225,8 @@ public class ProbIA5Board {
 
     //Nova ruta. De momento solo puede tener una estación final
     //Bicis recogidas <= nbicis en e1 && Bicis recogidas <= 30
-    public void añadirFurgoneta(Estacion e1, Estacion e2, int bicisRecogidas, int bicisDejadas) {
-        Ruta rutaNueva = new Ruta(e1, e2, bicisRecogidas, bicisDejadas);
+    public void añadirFurgoneta(Estacion e1, Estacion e2, Estacion e3, int bicisRecogidas, int bicisDejadas) {
+        Ruta rutaNueva = new Ruta(e1, e2, e3, bicisRecogidas, bicisDejadas, bicisRecogidas - bicisDejadas);
         //System.out.println("Coste antes de la nueva ruta: " + coste);
         modificarCoste(rutaNueva);
 
@@ -211,12 +242,13 @@ public class ProbIA5Board {
         int c = 0;
 
         //Suma al coste los kilometros de la ruta ponderados por el numero de bicis transportado
-        //c += distancia1(ruta)*((ruta.getNBicis() + 9)/10);
+        //c += distanciaRecorrida(ruta)*((ruta.getNBicis() + 9)/10);
 
 
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
         c -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
 
+        if (ruta.getEstacionFinal2() != null) c -= min(ruta.getBicisDejadas2(), bicisNecesarias(ruta.getEstacionFinal2()));
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
         c += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
 
@@ -236,22 +268,30 @@ public class ProbIA5Board {
     }
 
     public void cambiarEstacionInicial(Ruta r1, Estacion e1) {
-        r1.estacionIni = e1;
+        r1.setEstacionFi1(e1);
         modificarCoste(r1);
-        System.out.println("Estacion Inicial cambiada");
+        //System.out.println("Estacion Inicial cambiada");
     }
 
-    public void cambiarEstacionFinal(Ruta r1, Estacion e1) {
-        r1.estacionFi1 = e1;
+    public void cambiarEstacionFinal1(Ruta r1, Estacion e1) {
+        r1.setEstacionFi1(e1);
         modificarCoste(r1);
-        System.out.println("EStacion Final Cambiada");
+        //System.out.println("EStacion Final 1 Cambiada");
     }
 
-    public void añadirEstacionFinal2(Ruta r1, Estacion e2) {
-        r1.estacionFi2 = e2;
+    public void cambiarEstacionFinal2(Ruta r1, Estacion e1) {
+        r1.setEstacionFi2(e1);
+        modificarCoste(r1);
+        //System.out.println("EStacion Final 2 Cambiada");
+    }
+
+    /*
+    public void añadirEstacionFinal2(Ruta r1, Estacion e2, int bicisD2) {
+        r1.setEstacionFi2(e2);
+        r1.setNbicisDejadas2(bicisD2);
         modificarCoste(r1);
         System.out.println("Estacion Final 2 Añadida");
-    }
+    }*/
 
 
 
@@ -269,14 +309,11 @@ public class ProbIA5Board {
     }
 
     //Distancia entre la estacion inicial y la estacion final 1
-    public int distancia1(final Ruta ruta) {
-        return distanciaEstaciones(ruta.getEstacionInicial(), ruta.getEstacionFinal1());
+    public int distanciaRecorrida(final Ruta ruta) {
+        int dis = distanciaEstaciones(ruta.getEstacionInicial(), ruta.getEstacionFinal1());
+        if (ruta.getEstacionFinal2() != null) dis += distanciaEstaciones(ruta.getEstacionFinal1(), ruta.getEstacionFinal2());
+        return dis;
     }
-
-    ////Distancia entre la estacion final 1 y la estacion final 2
-    /*public int distancia2(final Ruta ruta) {
-        return distanciaEstaciones(ruta.getEstacionFinal1(), ruta.getEstacionFinal2());
-    }*/
 
     //Devuelve la distancia entre las dos estaciones
     public int distanciaEstaciones(Estacion e1, Estacion e2) {
