@@ -158,6 +158,18 @@ public class ProbIA5Board {
     /****** GETTERS ******/
     /*********************/
 
+
+    public Estacion getEstacion(int x, int y) {
+        for (Estacion i : estaciones) {
+            if (i.getCoordX() == x && i.getCoordY() == y) return i;
+        }
+
+        System.out.println("");
+        System.out.println("GET ESTACION HA FALLAT");
+        System.out.println("");
+
+        return estaciones.get(0);
+    }
     public int getNBicis() {
         return(nbicis);
     }
