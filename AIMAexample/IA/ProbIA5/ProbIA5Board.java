@@ -130,6 +130,21 @@ public class ProbIA5Board {
         coste = c;
     }
 
+    //Copia del pare amb totes les copies de rutes, excepte una que no s'afageix
+    public ProbIA5Board(Estaciones e, int nb, int nf, ArrayList<Ruta> r, float c, Ruta noAñadir) {
+        estaciones = e;
+        nbicis = nb;
+        nestaciones = e.size();
+        nfurgos = nf;
+
+        Rutas = new ArrayList<>(r.size());
+        for (int i = 0; i < r.size(); ++i) {
+            Ruta ruta = r.get(i);
+            if (!ruta.equals(noAñadir)) Rutas.add(copiarRuta(ruta));
+        }
+        coste = c;
+    }
+
     private Ruta copiarRuta(Ruta r) {
         Ruta nuevaRuta = new Ruta(r.getEstacionInicial(), r.getEstacionFinal1(), r.getEstacionFinal2(),
                 r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2());
@@ -159,7 +174,7 @@ public class ProbIA5Board {
         int i = random.nextInt(nestaciones);
 
         Estacion randomE = getEstaciones().get(i);
-
+        System.out.println(coste);
         if (!randomE.equals(e1) && !randomE.equals(e2)) return randomE;
         else return getEstacionRandom(e1, e2);
 
@@ -206,14 +221,12 @@ public class ProbIA5Board {
     }
 
 
+    /*
     public boolean estadoInicial2() {
         ordenarEstacionesPorDiferencia(estaciones);
         //List<Ruta> rutas = new ArrayList<>();
         Rutas = new ArrayList<>();
 
-        if (estaciones.size() < 2 || nfurgos > 30) {
-            return true;
-        }
         for (int i = 0; i < estaciones.size() - 1; i++) {
             Estacion estacionFinal = estaciones.get(i);
             Estacion estacionInicial = estaciones.get(estaciones.size() - 1);
@@ -226,14 +239,15 @@ public class ProbIA5Board {
         }
         return false;
     }
+    */
 
     /*Funció auxiliar Esther*/
     public static void ordenarEstacionesPorDiferencia(List<Estacion> estaciones) {
         Collections.sort(estaciones, new Comparator<Estacion>() {
             @Override
             public int compare(Estacion estacion1, Estacion estacion2) {
-                int diferencia1 = estacion1.getNumBicicletasNoUsadas() - estacion1.getDemanda();
-                int diferencia2 = estacion2.getNumBicicletasNoUsadas() - estacion2.getDemanda();
+                int diferencia1 = estacion1.getNumBicicletasNext() - estacion1.getDemanda();
+                int diferencia2 = estacion2.getNumBicicletasNext() - estacion2.getDemanda();
                 return Integer.compare(diferencia1, diferencia2);
             }
         });
@@ -246,7 +260,18 @@ public class ProbIA5Board {
     //Nova ruta. De momento solo puede tener una estación final
     //Bicis recogidas <= nbicis en e1 && Bicis recogidas <= 30
     public void añadirFurgoneta(Estacion e1, Estacion e2, Estacion e3, int bicisRecogidas, int bicisDejadas) {
-        Ruta rutaNueva = new Ruta(e1, e2, e3, bicisRecogidas, bicisDejadas, bicisRecogidas - bicisDejadas);
+        //Ruta rutaNueva = new Ruta(e1, e2, e3, bicisRecogidas, bicisDejadas, bicisRecogidas - bicisDejadas);
+        Ruta rutaNueva = new Ruta(e1, e2, bicisRecogidas, bicisDejadas);
+        //System.out.println("Coste antes de la nueva ruta: " + coste);
+        modificarCoste(rutaNueva);
+
+        Rutas.add(rutaNueva);
+        //System.out.println("Nuevo coste: " + coste);
+    }
+
+    public void cambiarEstacionInicial(Ruta ruta, Estacion newInicial) {
+        //Ruta rutaNueva = new Ruta(e1, e2, e3, bicisRecogidas, bicisDejadas, bicisRecogidas - bicisDejadas);
+        Ruta rutaNueva = new Ruta(newInicial, ruta.getEstacionFinal1(), ruta.getEstacionFinal2(), ruta.getBicisRecogidas(), ruta.getBicisDejadas1(), ruta.getBicisDejadas2());
         //System.out.println("Coste antes de la nueva ruta: " + coste);
         modificarCoste(rutaNueva);
 
@@ -287,31 +312,11 @@ public class ProbIA5Board {
         //System.out.println("");
     }
 
-    public void cambiarEstacionInicial(Ruta r1, Estacion e1) {
-        r1.setEstacionFi1(e1);
-        modificarCoste(r1);
-        //System.out.println("Estacion Inicial cambiada");
-    }
 
-    public void cambiarEstacionFinal1(Ruta r1, Estacion e1) {
-        r1.setEstacionFi1(e1);
-        modificarCoste(r1);
-        //System.out.println("EStacion Final 1 Cambiada");
-    }
 
-    public void cambiarEstacionFinal2(Ruta r1, Estacion e1) {
-        r1.setEstacionFi2(e1);
-        modificarCoste(r1);
-        //System.out.println("EStacion Final 2 Cambiada");
-    }
 
-    /*
-    public void añadirEstacionFinal2(Ruta r1, Estacion e2, int bicisD2) {
-        r1.setEstacionFi2(e2);
-        r1.setNbicisDejadas2(bicisD2);
-        modificarCoste(r1);
-        System.out.println("Estacion Final 2 Añadida");
-    }*/
+
+
 
 
 
