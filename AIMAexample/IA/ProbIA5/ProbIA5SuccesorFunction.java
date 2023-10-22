@@ -19,16 +19,13 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
             for (Estacion e2 : padre.getEstaciones()) {
                 if (!e1.equals(e2) && padre.getNRutas() < padre.getNFurgos()) {
                     boolean e1Used = padre.rutaIniciaEnEstacion(e1);
-                    if (!e1Used) {
+                    boolean e2Used = padre.rutaFinalEnEstacion(e2);
+                    if (!e1Used && !e2Used) {
                         for (int bicisR = 0; bicisR <= e1.getNumBicicletasNext() && bicisR <= 30; ++bicisR) {
                             for (int bicisD = 0; bicisD <= bicisR; ++bicisD) {
                                 ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getCoste());
                                 sucesor.añadirFurgoneta(e1, e2, null, bicisR, bicisD);
-
-                                Estacion inicial = sucesor.getEstacion(e1.getCoordX(), e1.getCoordY());
-                                Estacion final1 = sucesor.getEstacion(e2.getCoordX(), e2.getCoordY());
-                                inicial.setNumBicicletasNext(inicial.getNumBicicletasNext() - bicisR);
-                                final1.setNumBicicletasNext(final1.getNumBicicletasNext() + bicisD);
+                                //HEM DE TENIR EN COMPTE QUE HEM D'ACTUALITZAR EL NUMBICISNEXT
 
                                 retval.add(new Successor("BR " + bicisR + ". BD1 " + bicisD + ". BD2 " + (bicisR - bicisD)
                                         + ". Coste " + sucesor.getCoste() + ". BicisNext, Demanda: "
@@ -41,9 +38,7 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
             }
 
         }
-
         /*
-
         for (IA.ProbIA5.ProbIA5Board.Ruta ruta : padre.getRutas()) {
             for (Estacion newInicial : padre.getEstaciones()) {
                 if (!padre.rutaIniciaEnEstacion(newInicial) && newInicial.getNumBicicletasNext() >= ruta.getBicisRecogidas()) {
@@ -51,9 +46,12 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                     sucesor.cambiarEstacionInicial(ruta, newInicial);
                     retval.add(new Successor("Cambiada estación inicial de: " + ruta.getEstacionInicial().getCoordX() + " "
                             + ruta.getEstacionInicial().getCoordY() + " a: " + newInicial.getCoordX() + " " + newInicial.getCoordY(), sucesor));
+                    System.out.println("BUCLE");
                 }
             }
-        }*/
+        }
+
+         */
 
 
 

@@ -222,6 +222,15 @@ public class ProbIA5Board {
         return false; // La estación no se usa como punto de inicio de ninguna ruta
     }
 
+    public boolean rutaFinalEnEstacion(Estacion estacion) {
+        for (Ruta ruta : Rutas) {
+            if (ruta.getEstacionFinal1().equals(estacion)) {
+                return true; // La ruta ya inicia en esta estación
+            }
+        }
+        return false; // La estación no se usa como punto de inicio de ninguna ruta
+    }
+
     /********************************/
     /****** ESTADOS INICIALES *******/
     /********************************/
