@@ -44,9 +44,10 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                 if (!padre.rutaIniciaEnEstacion(newInicial) && newInicial.getNumBicicletasNext() >= ruta.getBicisRecogidas()) {
                     ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getCoste(), ruta);
                     sucesor.cambiarEstacionInicial(ruta, newInicial);
+                    System.out.println("EStacio inicial anterior: " + ruta.getEstacionInicial().getCoordX() + " " + ruta.getEstacionInicial().getCoordY()
+                    + " a estacion inicial " + newInicial.getCoordX() + " " + newInicial.getCoordY());
                     retval.add(new Successor("Cambiada estación inicial de: " + ruta.getEstacionInicial().getCoordX() + " "
                             + ruta.getEstacionInicial().getCoordY() + " a: " + newInicial.getCoordX() + " " + newInicial.getCoordY(), sucesor));
-                    System.out.println("BUCLE");
                 }
             }
         }

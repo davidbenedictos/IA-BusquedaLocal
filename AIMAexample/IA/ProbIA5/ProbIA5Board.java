@@ -114,6 +114,7 @@ public class ProbIA5Board {
         nestaciones = e.size();
         nfurgos = nf;
         Rutas = new ArrayList<>();
+        //estadoInicial2();
         coste = 0;
     }
 
@@ -242,7 +243,6 @@ public class ProbIA5Board {
     }
 
 
-    /*
     public boolean estadoInicial2() {
         ordenarEstacionesPorDiferencia(estaciones);
         //List<Ruta> rutas = new ArrayList<>();
@@ -260,7 +260,6 @@ public class ProbIA5Board {
         }
         return false;
     }
-    */
 
     /*Funció auxiliar Esther*/
     public static void ordenarEstacionesPorDiferencia(List<Estacion> estaciones) {
