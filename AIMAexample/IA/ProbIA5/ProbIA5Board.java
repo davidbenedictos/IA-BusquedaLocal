@@ -175,6 +175,15 @@ public class ProbIA5Board {
         Rutas = new ArrayList<>(rutas);
     }
 
+    public boolean rutaIniciaEnEstacion(Estacion estacion) {
+        for (Ruta ruta : Rutas) {
+            if (ruta.getEstacionInicial().equals(estacion)) {
+                return true; // La ruta ya inicia en esta estación
+            }
+        }
+        return false; // La estación no se usa como punto de inicio de ninguna ruta
+    }
+
     /********************************/
     /****** ESTADOS INICIALES *******/
     /********************************/
