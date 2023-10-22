@@ -1,6 +1,6 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "C:/Users/34696/OneDrive/Escriptori/FIB/IA/IA-BusuedaLocal/AIMAEXAMPLE/*.jar"
+        "/Users/esther/Desktop/GCED/Q7/IA/LAB/IA-BusquedaLocal/AIMAEXAMPLE/*.jar"
     ]
 }

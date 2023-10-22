@@ -40,7 +40,7 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                                     for (int bicisR = 0; bicisR < e1.getNumBicicletasNext() && bicisR < 30; ++bicisR) {
                                         for (int bicisD = 0; bicisD < bicisR; ++bicisD) {
                                             ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getCoste());
-                                            if (bicisR - bicisR > 0) {
+                                            if (bicisR - bicisD > 0) {
                                                 Estacion e3 = padre.getEstacionRandom(e1, e2);
                                                 sucesor.añadirFurgoneta(e1, e2, e3, bicisR, bicisD);
                                             } else sucesor.añadirFurgoneta(e1, e2, null, bicisR, bicisD);

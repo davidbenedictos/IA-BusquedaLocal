@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
+
 
 import static java.lang.Math.*;
 
@@ -151,9 +153,16 @@ public class ProbIA5Board {
 
     //Torna una estacio random diferent a e1 i e2
     public Estacion getEstacionRandom(Estacion e1, Estacion e2) {
-        Estacion randomE = getEstaciones().get(((int) random())%nestaciones);
+        Random random = new Random();
+
+        // Para generar un número en un rango específico, puedes usar el método nextInt con argumentos
+        int i = random.nextInt(nestaciones);
+
+        Estacion randomE = getEstaciones().get(i);
+
         if (!randomE.equals(e1) && !randomE.equals(e2)) return randomE;
         else return getEstacionRandom(e1, e2);
+
     }
 
     public int getNFurgos() {
@@ -175,6 +184,8 @@ public class ProbIA5Board {
         Rutas = new ArrayList<>(rutas);
     }
 
+
+    //ho podem fer en temps constant
     public boolean rutaIniciaEnEstacion(Estacion estacion) {
         for (Ruta ruta : Rutas) {
             if (ruta.getEstacionInicial().equals(estacion)) {
