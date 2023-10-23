@@ -53,9 +53,13 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
         }
 
          */
-
-
-
+        for (ProbIA5Board.Ruta ruta : padre.getRutas()) {
+            for (ProbIA5Board.Ruta ruta2: padre.getRutas()) {
+                if (!ruta.equals(ruta2)) {
+                    //fer intercambiar
+                }
+            }
+        }
 
         return retval;
         }
