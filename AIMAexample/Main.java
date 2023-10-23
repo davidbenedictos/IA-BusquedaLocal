@@ -21,7 +21,8 @@ public class Main {
          *  For a problem to be solvable:
          *    count(0,prob) % 2 == count(0,sol) %2
          */
-        Estaciones e = new Estaciones(25, 1250, 0, 4);
+        long tiempoInicial = System.nanoTime();
+        Estaciones e = new Estaciones(25, 1250, 0, 1234);
         ProbIA5Board board = new ProbIA5Board(e, 1250, 5);
         // board.showState();
 
@@ -46,7 +47,13 @@ public class Main {
 
         // You can access also to the goal state using the
 	// method getGoalState of class Search
+        long tiempoFinal = System.nanoTime();
+        long tiempoEjecucion = tiempoFinal - tiempoInicial;
 
+        // Convertir nanosegundos a milisegundos
+        long tiempoEnMilisegundos = tiempoEjecucion / 1000000;
+
+        System.out.println("Tiempo de ejecución: " + tiempoEnMilisegundos + " milisegundos");
     }
 
         private static void printInstrumentation(Properties properties) {
