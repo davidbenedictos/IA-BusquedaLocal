@@ -7,10 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-
-
 import static java.lang.Math.*;
-
 
 public class ProbIA5Board {    
    public class Ruta {
@@ -96,9 +93,9 @@ public class ProbIA5Board {
    }
 
 
-    /*********************/
-    /***** ATRIBUTOS *****/
-    /*********************/
+    /*******************************/
+    /***** ATRIBUTOS DE ESTADO *****/
+    /*******************************/
 
     private static int nbicis;
     private static int nestaciones;
@@ -109,7 +106,9 @@ public class ProbIA5Board {
     private float coste;
 
 
-    //CREADORAS
+    /**************************/
+    /******* CREADORAS ********/
+    /**************************/
     public ProbIA5Board(Estaciones e, int nb, int nf) {
         estaciones = e;
         nbicis = nb;
@@ -162,8 +161,6 @@ public class ProbIA5Board {
     }
 
 
-
-
     /*********************/
     /****** GETTERS ******/
     /*********************/
@@ -171,7 +168,26 @@ public class ProbIA5Board {
 
     public ArrayList<Integer> getBicisNext() {return bicisNext;}
 
-    //retorna quina en quina i del vector estaciones està la estacio(x, y)
+    //Devuelve en que posicion del vector estaciones se encuentra la estación con coordenadas x e y
+
+    public int getNBicis() { return nbicis; }
+
+    public int getNEstaciones() { return nestaciones; }
+
+    public int getNFurgos() { return nfurgos; }
+
+    public Estaciones getEstaciones() { return estaciones; }
+
+    public ArrayList<Ruta> getRutas(){ return Rutas; }
+    public float getCoste(){ return coste; }
+
+    public int getNRutas() { return Rutas.size(); };
+
+    public int getBicisNext(int x, int y) {
+        int i = getEstacion(x, y);
+        return bicisNext.get(i);
+    }
+
     public int getEstacion(int x, int y) {
         for (int i = 0; i < estaciones.size(); ++i) {
             if (estaciones.get(i).getCoordX() == x && estaciones.get(i).getCoordY() == y) return i;
@@ -183,14 +199,8 @@ public class ProbIA5Board {
 
         return 0;
     }
-    public int getNBicis() {
-        return(nbicis);
-    }
 
-    public int getNEstaciones() {
-        return(nestaciones);
-    }
-
+    /*
     //Torna una estacio random diferent a e1 i e2
     public Estacion getEstacionRandom(Estacion e1, Estacion e2) {
         Random random = new Random();
@@ -203,66 +213,17 @@ public class ProbIA5Board {
         if (!randomE.equals(e1) && !randomE.equals(e2)) return randomE;
         else return getEstacionRandom(e1, e2);
 
-    }
+    }*/
 
-    public int getNFurgos() {
-        return(nfurgos);
-    }
-
-    public Estaciones getEstaciones() {
-        return(estaciones);
-    }
-
-    public ArrayList<Ruta> getRutas(){
-        return Rutas;
-    }
-    public float getCoste(){ return coste; }
-
-    public int getNRutas() { return Rutas.size(); };
-
-    //on ho modifiquem -> al operador
-    public void modificarBicisNext(int x, int y, int nuevas) {
-        int i = getEstacion(x, y);
-        bicisNext.set(i, bicisNext.get(i) + nuevas);
-    }
-
-    public int getBicisNext(int x, int y) {
-        int i = getEstacion(x, y);
-        return bicisNext.get(i);
-    }
-
-
-    //ho podem fer en temps constant
-    public boolean rutaIniciaEnEstacion(Estacion estacion) {
-        for (Ruta ruta : Rutas) {
-            if (ruta.getEstacionInicial().equals(estacion)) {
-                return true; // La ruta ya inicia en esta estación
-            }
-        }
-        return false; // La estación no se usa como punto de inicio de ninguna ruta
-    }
-
-    public boolean rutaFinalEnEstacion(Estacion estacion) {
-        for (Ruta ruta : Rutas) {
-            if (ruta.getEstacionFinal1().equals(estacion)) {
-                return true; // La ruta ya inicia en esta estación
-            }
-        }
-        return false; // La estación no se usa como punto de inicio de ninguna ruta
-    }
 
     /********************************/
     /****** ESTADOS INICIALES *******/
     /********************************/
 
-    //La primera solución inicial es un vector de Rutas vacio
     public boolean estadoInicial1() {
         Rutas = new ArrayList<Ruta>();
         return true;
     }
-
-
-
     public boolean estadoInicial2() {
         ordenarEstacionesPorDiferencia(estaciones);
         //List<Ruta> rutas = new ArrayList<>();
@@ -323,7 +284,17 @@ public class ProbIA5Board {
         //System.out.println("Nuevo coste: " + coste);
     }
 
-    //Calcular el coste de una ruta. Supongo que los beneficios restan y los costes suman. Queremos minimizar el coste
+    /**************************/
+    /****** MODIFICADORAS *****/
+    /**************************/
+
+    //Actualiza el nombre de bicicletas que habra en una estacion nuevas
+    //Nuevas puede ser positivo si dejamos bicis o negativo si nos llevamos
+    public void modificarBicisNext(int x, int y, int nuevas) {
+        int i = getEstacion(x, y);
+        bicisNext.set(i, bicisNext.get(i) + nuevas);
+    }
+
     public void modificarCoste(Ruta ruta) {
         coste -= ruta.getCosteRuta();
         ruta.setCosteRuta(0);
@@ -333,7 +304,6 @@ public class ProbIA5Board {
         //Suma al coste los kilometros de la ruta ponderados por el numero de bicis transportado
         //c += distanciaRecorrida(ruta)*((ruta.getNBicis() + 9)/10);
 
-
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
         c -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
 
@@ -341,39 +311,31 @@ public class ProbIA5Board {
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
         c += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
 
-
-
-
-        /*System.out.println("Modificamos el coste de verdad");
-        System.out.println("Bicicletas sobrantes: " + bicisSobrantes(ruta.getEstacionInicial()));
-        System.out.println("Bicicletas necesarias: " + bicisNecesarias(ruta.getEstacionFinal1()));
-        System.out.println("Bicicletas recogidas: " + ruta.getBicisRecogidas());
-        System.out.println("Bicicletas dejadas: " + ruta.getBicisDejadas1());
-        System.out.println("El coste se modifica en: " + modificacion);
-        System.out.println("Numero de furgos totales " + Rutas.size());*/
         coste += c;
         ruta.setCosteRuta(c);
-        //System.out.println("");
     }
 
 
+    /*************************/
+    /****** AUXILIARES *******/
+    /*************************/
 
+    public boolean rutaIniciaEnEstacion(Estacion estacion) {
+        for (Ruta ruta : Rutas) {
+            if (ruta.getEstacionInicial().equals(estacion)) {
+                return true; // La ruta ya inicia en esta estación
+            }
+        }
+        return false; // La estación no se usa como punto de inicio de ninguna ruta
+    }
 
-
-
-
-
-
-    
-    //Bicis que faltaran en una estacion
+    //Bicis que faltan en una estacion
     public int bicisNecesarias(Estacion e) {
-        //return max(0, e.getDemanda() - e.getNumBicicletasNext());
         return max(0, e.getDemanda() - getBicisNext(e.getCoordX(), e.getCoordY()));
     }
 
     //Bicis que sobran en una estacion
     public int bicisSobrantes(Estacion e) {
-        //return max(0, e.getNumBicicletasNext() - e.getDemanda());
         return max(0, getBicisNext(e.getCoordX(), e.getCoordY()) - e.getDemanda());
     }
 
