@@ -127,12 +127,11 @@ public class ProbIA5Board {
         nbicis = nb;
         nestaciones = e.size();
         nfurgos = nf;
-        Rutas = new ArrayList<>();
         for (int i = 0; i < e.size(); ++i) {
             estaciones.put(e.get(i), e.get(i).getNumBicicletasNext());
         }
 
-        estadoInicial1();
+        estadoInicial2(e);
 
         coste = 0;
 
@@ -222,38 +221,35 @@ public class ProbIA5Board {
         Rutas = new ArrayList<Ruta>();
         return true;
     }
-    /*
-    public boolean estadoInicial2() {
-        ordenarEstacionesPorDiferencia(estaciones);
-        //List<Ruta> rutas = new ArrayList<>();
-        Rutas = new ArrayList<>();
 
-        for (int i = 0; i < estaciones.size() - 1; i++) {
-            Estacion estacionFinal = estaciones.get(i);
-            Estacion estacionInicial = estaciones.get(estaciones.size() - 1);
-            int diferencia = estacionFinal.getNumBicicletasNext() - estacionFinal.getDemanda();
-            if (diferencia > 0) {
-                Ruta ruta = new Ruta(estacionInicial, estacionFinal, diferencia, diferencia);
-                Rutas.add(ruta);
-                nfurgos += 1;
+    public boolean estadoInicial2(Estaciones e) {
+        ordenarEstacionesPorDiferencia(e);
+        Rutas = new ArrayList<>();
+        int furgosUsadas = 0;
+        for (int i = 0; i < e.size() - 1; i++) {
+            if(furgosUsadas < nfurgos){
+                Estacion estacionFinal = e.get(i);
+                Estacion estacionInicial = e.get(estaciones.size() - 1);
+                int bicisSobr = bicisSobrantes(estacionInicial);
+                Ruta ruta = new Ruta(estacionInicial, estacionFinal, estacionFinal ,bicisSobr, bicisSobr, 0);
+                estaciones.put(estacionFinal, estaciones.get(estacionFinal)+bicisSobr);
+                estaciones.put(estacionInicial, estaciones.get(estacionInicial)-bicisSobr);
             }
         }
         return false;
-    }*/
+    }
 
 
-    /*Funció auxiliar Esther*/
-    /*
-    public static void ordenarEstacionesPorDiferencia(List<Estacion> estaciones) {
-        Collections.sort(estaciones, new Comparator<Estacion>() {
+    public void ordenarEstacionesPorDiferencia(List<Estacion> e) {
+        Collections.sort(e, new Comparator<Estacion>() {
             @Override
             public int compare(Estacion estacion1, Estacion estacion2) {
-                int diferencia1 = estacion1.getNumBicicletasNext() - estacion1.getDemanda();
-                int diferencia2 = estacion2.getNumBicicletasNext() - estacion2.getDemanda();
-                return Integer.compare(diferencia1, diferencia2);
+                int diferencia1 = bicisNecesarias(estacion1);
+                int diferencia2 = bicisNecesarias(estacion2);
+                return Integer.compare(diferencia2, diferencia1);
             }
         });
-    }*/
+    }
 
     /*************************/
     /****** OPERADORES *******/
