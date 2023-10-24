@@ -105,7 +105,9 @@ public class ProbIA5Board {
     private static Estaciones estaciones;
     private int nfurgos;
     private ArrayList<Ruta> Rutas;
+    private ArrayList<Integer> bicisNext; //numero de bicicletas que habra en una estacion teniendo en cuenta nuestros desplazamientos
     private float coste;
+
 
     //CREADORAS
     public ProbIA5Board(Estaciones e, int nb, int nf) {
@@ -114,11 +116,14 @@ public class ProbIA5Board {
         nestaciones = e.size();
         nfurgos = nf;
         Rutas = new ArrayList<>();
-
+        bicisNext = new ArrayList<>(e.size());
+        for (int i = 0; i < e.size(); ++i) {
+            bicisNext.add(e.get(i).getNumBicicletasNext());
+        }
         coste = 0;
     }
 
-    public ProbIA5Board(Estaciones e, int nb, int nf, ArrayList<Ruta> r, float c) {
+    public ProbIA5Board(Estaciones e, int nb, int nf, ArrayList<Ruta> r, ArrayList<Integer> bN, float c) {
         estaciones = e;
         nbicis = nb;
         nestaciones = e.size();
@@ -128,11 +133,15 @@ public class ProbIA5Board {
         for (int i = 0; i < r.size(); ++i) {
             Rutas.add(copiarRuta(r.get(i)));
         }
+        bicisNext = new ArrayList<>(e.size());
+        for (int i = 0; i < e.size(); ++i) {
+            bicisNext.add(bN.get(i));
+        }
         coste = c;
     }
 
     //Copia del pare amb totes les copies de rutes, excepte una que no s'afageix
-    public ProbIA5Board(Estaciones e, int nb, int nf, ArrayList<Ruta> r, float c, Ruta noAñadir) {
+    /*public ProbIA5Board(Estaciones e, int nb, int nf, ArrayList<Ruta> r, float c, Ruta noAñadir) {
         estaciones = e;
         nbicis = nb;
         nestaciones = e.size();
@@ -144,7 +153,7 @@ public class ProbIA5Board {
             if (!ruta.equals(noAñadir)) Rutas.add(copiarRuta(ruta));
         }
         coste = c;
-    }
+    }*/
 
     private Ruta copiarRuta(Ruta r) {
         Ruta nuevaRuta = new Ruta(r.getEstacionInicial(), r.getEstacionFinal1(), r.getEstacionFinal2(),
@@ -160,16 +169,19 @@ public class ProbIA5Board {
     /*********************/
 
 
-    public Estacion getEstacion(int x, int y) {
-        for (Estacion i : estaciones) {
-            if (i.getCoordX() == x && i.getCoordY() == y) return i;
+    public ArrayList<Integer> getBicisNext() {return bicisNext;}
+
+    //retorna quina en quina i del vector estaciones està la estacio(x, y)
+    public int getEstacion(int x, int y) {
+        for (int i = 0; i < estaciones.size(); ++i) {
+            if (estaciones.get(i).getCoordX() == x && estaciones.get(i).getCoordY() == y) return i;
         }
 
         System.out.println("");
         System.out.println("GET ESTACION HA FALLAT");
         System.out.println("");
 
-        return estaciones.get(0);
+        return 0;
     }
     public int getNBicis() {
         return(nbicis);
@@ -208,8 +220,15 @@ public class ProbIA5Board {
 
     public int getNRutas() { return Rutas.size(); };
 
-    public void setRutas(ArrayList<Ruta> rutas){
-        Rutas = new ArrayList<>(rutas);
+    //on ho modifiquem -> al operador
+    public void modificarBicisNext(int x, int y, int nuevas) {
+        int i = getEstacion(x, y);
+        bicisNext.set(i, bicisNext.get(i) + nuevas);
+    }
+
+    public int getBicisNext(int x, int y) {
+        int i = getEstacion(x, y);
+        return bicisNext.get(i);
     }
 
 
@@ -285,6 +304,9 @@ public class ProbIA5Board {
         //Ruta rutaNueva = new Ruta(e1, e2, e3, bicisRecogidas, bicisDejadas, bicisRecogidas - bicisDejadas);
         Ruta rutaNueva = new Ruta(e1, e2, bicisRecogidas, bicisDejadas);
         //System.out.println("Coste antes de la nueva ruta: " + coste);
+        modificarBicisNext(e1.getCoordX(), e1.getCoordY(), -1*bicisRecogidas);
+        modificarBicisNext(e2.getCoordX(), e2.getCoordY(), bicisDejadas);
+        if (e3 != null) modificarBicisNext(e3.getCoordX(), e3.getCoordY(), bicisRecogidas - bicisDejadas);
         modificarCoste(rutaNueva);
 
         Rutas.add(rutaNueva);
@@ -345,14 +367,14 @@ public class ProbIA5Board {
     
     //Bicis que faltaran en una estacion
     public int bicisNecesarias(Estacion e) {
-        return max(0, e.getDemanda() - e.getNumBicicletasNext());
-
+        //return max(0, e.getDemanda() - e.getNumBicicletasNext());
+        return max(0, e.getDemanda() - getBicisNext(e.getCoordX(), e.getCoordY()));
     }
 
     //Bicis que sobran en una estacion
     public int bicisSobrantes(Estacion e) {
-        return max(0, e.getNumBicicletasNext() - e.getDemanda());
-
+        //return max(0, e.getNumBicicletasNext() - e.getDemanda());
+        return max(0, getBicisNext(e.getCoordX(), e.getCoordY()) - e.getDemanda());
     }
 
     //Distancia entre la estacion inicial y la estacion final 1

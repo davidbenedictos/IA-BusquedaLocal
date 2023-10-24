@@ -28,16 +28,21 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                 if (!e1.equals(e2) && padre.getNRutas() < padre.getNFurgos()) {
                     boolean e1Used = padre.rutaIniciaEnEstacion(e1);
                     boolean e2Used = padre.rutaFinalEnEstacion(e2);
-                    if (!e1Used && !e2Used) { //HEM DE TENIR EN COMPTE QUE HEM D'ACTUALITZAR EL NUMBICISNEXT
+
+                    if (!e1Used) { //HEM DE TENIR EN COMPTE QUE HEM D'ACTUALITZAR EL NUMBICISNEXT
                         for (int bicisR = 0; bicisR <= e1.getNumBicicletasNext() && bicisR <= 30; ++bicisR) {
                             for (int bicisD = 0; bicisD <= bicisR; ++bicisD) {
-                                ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getCoste());
+                                ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getBicisNext(), padre.getCoste());
                                 sucesor.añadirFurgoneta(e1, e2, null, bicisR, bicisD);
-                                /*retval.add(new Successor("Coste: " + sucesor.getCoste() + " . Estacion inicial " +
-                                        e1.getCoordX() + " " + e1.getCoordY() + " Estacion final 1: " +
-                                        e2.getCoordX() + " " + e2.getCoordY(), sucesor));*/
-                                retval.add(new Successor("Coste: " + sucesor.getCoste() + " . Distancia recorrida: "
-                                        + distanciaEstaciones(e1, e2), sucesor));
+                                retval.add(new Successor("C: " + sucesor.getCoste() +
+                                        ". eIni " + e1.getCoordX() + " " + e1.getCoordY()
+                                        + ". eFin1 " + e2.getCoordX() + " " + e2.getCoordY()
+                                        + ". D1, N1: " + e1.getDemanda() + " " + e1.getNumBicicletasNext()
+                                        + ". bR, bD: " + bicisR + " " + bicisD
+                                        + ". D2, N2: " + + e2.getDemanda() + " " + e2.getNumBicicletasNext()
+                                        , sucesor));
+                                /*retval.add(new Successor("Coste: " + sucesor.getCoste() + " . Distancia recorrida: "
+                                        + distanciaEstaciones(e1, e2), sucesor));*/
                             }
                         }
                     }
