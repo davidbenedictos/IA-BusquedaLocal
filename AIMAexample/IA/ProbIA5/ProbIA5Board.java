@@ -140,7 +140,7 @@ public class ProbIA5Board {
     }
 
     //Copia del pare amb totes les copies de rutes, excepte una que no s'afageix
-    /*public ProbIA5Board(Estaciones e, int nb, int nf, ArrayList<Ruta> r, float c, Ruta noAñadir) {
+    public ProbIA5Board(Estaciones e, int nb, int nf, ArrayList<Ruta> r, float c, ArrayList<Integer> bN, Ruta noAñadir) {
         estaciones = e;
         nbicis = nb;
         nestaciones = e.size();
@@ -152,12 +152,16 @@ public class ProbIA5Board {
             if (!ruta.equals(noAñadir)) Rutas.add(copiarRuta(ruta));
         }
         coste = c;
-    }*/
+    }
 
     private Ruta copiarRuta(Ruta r) {
         Ruta nuevaRuta = new Ruta(r.getEstacionInicial(), r.getEstacionFinal1(), r.getEstacionFinal2(),
                 r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2());
         return nuevaRuta;
+    }
+
+    public Ruta crearRuta(Estacion e1, Estacion e2, Estacion e3, int bR, int bD1, int bD2) {
+        return new Ruta(e1, e2, e3, bR, bD1, bD2);
     }
 
 
@@ -195,7 +199,7 @@ public class ProbIA5Board {
 
         System.out.println("");
         System.out.println("GET ESTACION HA FALLAT");
-        System.out.println("");
+        System.exit(-1);
 
         return 0;
     }
@@ -261,13 +265,14 @@ public class ProbIA5Board {
 
     //Nova ruta. De momento solo puede tener una estación final
     //Bicis recogidas <= nbicis en e1 && Bicis recogidas <= 30
-    public void añadirFurgoneta(Estacion e1, Estacion e2, Estacion e3, int bicisRecogidas, int bicisDejadas) {
-        //Ruta rutaNueva = new Ruta(e1, e2, e3, bicisRecogidas, bicisDejadas, bicisRecogidas - bicisDejadas);
-        Ruta rutaNueva = new Ruta(e1, e2, bicisRecogidas, bicisDejadas);
+    public void añadirFurgoneta(Estacion e1, Estacion e2, Estacion e3, int bR, int bD1, int bD2) {
+        Ruta rutaNueva = new Ruta(e1, e2, e3, bR, bD1, bD2);
+        //Ruta rutaNueva = new Ruta(e1, e2, bicisRecogidas, bicisDejadas);
         //System.out.println("Coste antes de la nueva ruta: " + coste);
-        modificarBicisNext(e1.getCoordX(), e1.getCoordY(), -1*bicisRecogidas);
-        modificarBicisNext(e2.getCoordX(), e2.getCoordY(), bicisDejadas);
-        if (e3 != null) modificarBicisNext(e3.getCoordX(), e3.getCoordY(), bicisRecogidas - bicisDejadas);
+        modificarBicisNext(e1.getCoordX(), e1.getCoordY(), -1*bR);
+        modificarBicisNext(e2.getCoordX(), e2.getCoordY(), bD1);
+        modificarBicisNext(e3.getCoordX(), e3.getCoordY(), bD2);
+
         modificarCoste(rutaNueva);
 
         Rutas.add(rutaNueva);
@@ -307,7 +312,8 @@ public class ProbIA5Board {
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
         c -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
 
-        if (ruta.getEstacionFinal2() != null) c -= min(ruta.getBicisDejadas2(), bicisNecesarias(ruta.getEstacionFinal2()));
+        c -= min(ruta.getBicisDejadas2(), bicisNecesarias(ruta.getEstacionFinal2()));
+
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
         c += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
 
@@ -340,9 +346,12 @@ public class ProbIA5Board {
     }
 
     //Distancia entre la estacion inicial y la estacion final 1
+
+    //APUNTAR A L'INFORME LA NOSTRA REPRESENTACIO DE ESTACIO FINAL 2
+
     public int distanciaRecorrida(final Ruta ruta) {
         int dis = distanciaEstaciones(ruta.getEstacionInicial(), ruta.getEstacionFinal1());
-        if (ruta.getEstacionFinal2() != null) dis += distanciaEstaciones(ruta.getEstacionFinal1(), ruta.getEstacionFinal2());
+        if (ruta.getBicisRecogidas() - ruta.getBicisDejadas1() > 0) dis += distanciaEstaciones(ruta.getEstacionFinal1(), ruta.getEstacionFinal2());
         return dis;
     }
 
@@ -362,3 +371,4 @@ public class ProbIA5Board {
         return min(0, valor);
     }
 }
+
