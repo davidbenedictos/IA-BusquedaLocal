@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Random;
 import static java.lang.Math.*;
 
-public class ProbIA5Board {    
+public class ProbIA5Board {
+
    public class Ruta {
         private Estacion estacionIni;
         private Estacion estacionFi1;
@@ -99,9 +100,11 @@ public class ProbIA5Board {
 
     private static int nbicis;
     private static int nestaciones;
-    private static Estaciones estaciones;
+
     private int nfurgos;
     private ArrayList<Ruta> Rutas;
+
+    private static Estaciones estaciones;
     private ArrayList<Integer> bicisNext; //numero de bicicletas que habra en una estacion teniendo en cuenta nuestros desplazamientos
     private float coste;
 
@@ -132,7 +135,11 @@ public class ProbIA5Board {
         for (int i = 0; i < r.size(); ++i) {
             Rutas.add(copiarRuta(r.get(i)));
         }
+
+
+
         bicisNext = new ArrayList<>(e.size());
+
         for (int i = 0; i < e.size(); ++i) {
             bicisNext.add(bN.get(i));
         }
@@ -194,14 +201,18 @@ public class ProbIA5Board {
 
     public int getEstacion(int x, int y) {
         for (int i = 0; i < estaciones.size(); ++i) {
-            if (estaciones.get(i).getCoordX() == x && estaciones.get(i).getCoordY() == y) return i;
+            if (estaciones.get(i).getCoordX() == x && estaciones.get(i).getCoordY() == y) {
+                //System.out.println("X e Y de veritat: " + estaciones.get(i).getCoordX() + " "
+                //+ estaciones.get(i).getCoordX());
+                return i;
+            }
         }
 
         System.out.println("");
         System.out.println("GET ESTACION HA FALLAT");
         System.exit(-1);
 
-        return 0;
+        return -1;
     }
 
     /*
@@ -269,9 +280,13 @@ public class ProbIA5Board {
         Ruta rutaNueva = new Ruta(e1, e2, e3, bR, bD1, bD2);
         //Ruta rutaNueva = new Ruta(e1, e2, bicisRecogidas, bicisDejadas);
         //System.out.println("Coste antes de la nueva ruta: " + coste);
+        //System.out.println("1");
         modificarBicisNext(e1.getCoordX(), e1.getCoordY(), -1*bR);
+        //System.out.println("2");
         modificarBicisNext(e2.getCoordX(), e2.getCoordY(), bD1);
+        //System.out.println("3");
         modificarBicisNext(e3.getCoordX(), e3.getCoordY(), bD2);
+        //System.out.println("4");
 
         modificarCoste(rutaNueva);
 
@@ -296,8 +311,24 @@ public class ProbIA5Board {
     //Actualiza el nombre de bicicletas que habra en una estacion nuevas
     //Nuevas puede ser positivo si dejamos bicis o negativo si nos llevamos
     public void modificarBicisNext(int x, int y, int nuevas) {
+        //System.out.println("Hola");
         int i = getEstacion(x, y);
-        bicisNext.set(i, bicisNext.get(i) + nuevas);
+    //    System.out.println("Size del vector " + bicisNext.size());
+        System.out.println("Abans del get. i = " + i);
+        if(i == 0){
+            //
+        }
+        //System.out.println("Size del vector " + bicisNext.size());
+        //System.out.println("X, Y " + x + " " + y);
+
+
+        int get = bicisNext.get(i);
+
+        //System.out.println("Despres del get" + get);
+
+        bicisNext.set(i, get + nuevas);
+
+        //System.out.println("Despres del set");
     }
 
     public void modificarCoste(Ruta ruta) {

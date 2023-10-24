@@ -62,9 +62,6 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
             }
         }
 
-
-
-
         //llevar una mas a e1
         //possibles fallos:
         //agafar mes de les que hi ha
@@ -72,18 +69,17 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
 
         //UNA BICI MAS A E2
         for (ProbIA5Board.Ruta r : padre.getRutas()) {
-            ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getBicisNext(), r);
-            sucesor.añadirFurgoneta(r.getEstacionInicial(), r.getEstacionFinal1(), r.getEstacionFinal2(),
-                    r.getBicisRecogidas() + 1, r.getBicisDejadas1() + 1, r.getBicisDejadas2());
-            retval.add(new Successor("Una bici dejada más en estacion final 1", sucesor));
+            Estacion ini = r.getEstacionInicial();
+            if (r.getBicisRecogidas() < 30 && padre.getBicisNext(ini.getCoordX(), ini.getCoordY()) > r.getBicisRecogidas()) {
+                ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(),
+                        padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getBicisNext(), r);
 
+                sucesor.añadirFurgoneta(r.getEstacionInicial(), r.getEstacionFinal1(), r.getEstacionFinal2(),
+                        r.getBicisRecogidas() + 1, r.getBicisDejadas1() + 1, r.getBicisDejadas2());
+
+                retval.add(new Successor("Una bici dejada más en estacion final 1", sucesor));
+            }
         }
-
-
-
-        //llevar una mas a e2
-
-
 
         return retval;
         }
