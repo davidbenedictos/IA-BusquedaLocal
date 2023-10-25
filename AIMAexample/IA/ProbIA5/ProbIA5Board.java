@@ -313,8 +313,8 @@ public class ProbIA5Board {
 
         int c = 0;
 
-        //Suma al coste los kilometros de la ruta ponderados por el numero de bicis transportado
-        //c += distanciaRecorrida(ruta)*((ruta.getNBicis() + 9)/10);
+        int bicicletasTransportadas = ruta.getBicisRecogidas() + ruta.getBicisDejadas1() + ruta.getBicisDejadas2();
+        c += ((bicicletasTransportadas + 9) / 10);
 
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
         c -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
