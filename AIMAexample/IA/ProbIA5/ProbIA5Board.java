@@ -25,24 +25,15 @@ public class ProbIA5Board {
 
 
 
-        public Ruta(Estacion e1, Estacion e2, Estacion e3, int n1, int n2, int n3) {
+        public Ruta(Estacion e1, Estacion e2, Estacion e3, int n1, int n2, int n3, int c) {
             this.estacionIni = e1;
             this.estacionFi1 = e2;
             this.estacionFi2 = e3;
             this.nbicisRecogidas = n1;
             this.nbicisDejadas1 = n2;
             this.nbicisDejadas2 = n3;
-            costeRuta = 0;
+            costeRuta = c;
 
-        }
-
-        public Ruta(Estacion e1, Estacion e2, int n1, int n2) {
-            this.estacionIni = e1;
-            this.estacionFi1 = e2;
-            this.estacionFi2 = null;
-            this.nbicisRecogidas = n1;
-            this.nbicisDejadas1 = n2;
-            this.nbicisDejadas2 = 0;
         }
 
         public Estacion getEstacionInicial() {
@@ -133,7 +124,6 @@ public class ProbIA5Board {
         estadoInicial1();
         //estadoInicial2(e);
 
-        System.out.println("Rutas size. " + getNRutas());
 
         coste = 0;
 
@@ -186,7 +176,7 @@ public class ProbIA5Board {
 
     private Ruta copiarRuta(Ruta r) {
         return new Ruta(r.getEstacionInicial(), r.getEstacionFinal1(), r.getEstacionFinal2(),
-                r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2());
+                r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2(), r.getCosteRuta());
     }
 
 
@@ -233,7 +223,8 @@ public class ProbIA5Board {
                 Estacion estacionFinal = e.get(i);
                 Estacion estacionInicial = e.get(estaciones.size() - 1);
                 int bicisSobr = bicisSobrantes(estacionInicial);
-                Ruta ruta = new Ruta(estacionInicial, estacionFinal, estacionFinal ,bicisSobr, bicisSobr, 0);
+                // HAY QUE CALCULAR EL COSTE DE LA RUTA
+                Ruta ruta = new Ruta(estacionInicial, estacionFinal, estacionFinal ,bicisSobr, bicisSobr, 0, 0);
                 Rutas.add(ruta);
                 estaciones.put(estacionFinal, estaciones.get(estacionFinal)+bicisSobr);
                 estaciones.put(estacionInicial, estaciones.get(estacionInicial)-bicisSobr);
@@ -262,11 +253,31 @@ public class ProbIA5Board {
     //Nova ruta. De momento solo puede tener una estación final
     //Bicis recogidas <= nbicis en e1 && Bicis recogidas <= 30
     public void añadirFurgoneta(Estacion e1, Estacion e2, Estacion e3, Integer bR, Integer bD1, Integer bD2) {
-        Ruta rutaNueva = new Ruta(e1, e2, e3, bR, bD1, bD2);
+        //si copiamos una ruta necesitamos su coste anterior, si es una ruta nueva coste empieza en cero
+        Ruta rutaNueva = new Ruta(e1, e2, e3, bR, bD1, bD2, 0);
 
         estaciones.put(e1, getBicisNext(e1) - bR);
 
 
+
+        estaciones.put(e2, getBicisNext(e2) + bD1);
+
+        estaciones.put(e3, getBicisNext(e3) + bD2);
+
+
+        modificarCoste(rutaNueva);
+
+        Rutas.add(rutaNueva);
+        //System.out.println("Nuevo coste: " + coste);
+    }
+
+    //c es el coste de la ruta antes de modificar alguno de sus aspectos, hay que recalcular el coste de esa ruta una vez
+    //modificada la ruta
+    public void modificarFurgoneta(Estacion e1, Estacion e2, Estacion e3, Integer bR, Integer bD1, Integer bD2, int c) {
+        //si copiamos una ruta necesitamos su coste anterior, si es una ruta nueva coste empieza en cero
+        Ruta rutaNueva = new Ruta(e1, e2, e3, bR, bD1, bD2, c);
+
+        estaciones.put(e1, getBicisNext(e1) - bR);
 
         estaciones.put(e2, getBicisNext(e2) + bD1);
 
@@ -295,7 +306,7 @@ public class ProbIA5Board {
     /**************************/
 
 
-
+    //Modificar coste amb l'operador canviar estacion inicial no te sentit
     public void modificarCoste(Ruta ruta) {
         coste -= ruta.getCosteRuta();
         ruta.setCosteRuta(0);
