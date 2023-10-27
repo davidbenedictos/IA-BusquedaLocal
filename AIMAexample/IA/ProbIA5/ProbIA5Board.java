@@ -121,8 +121,8 @@ public class ProbIA5Board {
         for (int i = 0; i < e.size(); ++i) {
             estaciones.put(e.get(i), e.get(i).getNumBicicletasNext());
         }
-        estadoInicial1();
-        //estadoInicial2(e);
+        //estadoInicial1();
+        estadoInicial2(e);
 
 
         coste = 0;
@@ -215,22 +215,27 @@ public class ProbIA5Board {
     }
 
     public boolean estadoInicial2(Estaciones e) {
-        ordenarEstacionesPorDiferencia(e);
+
         Rutas = new ArrayList<>();
-        int furgosUsadas = 0;
-        for (int i = 0; i < e.size() - 1; i++) {
-            if(furgosUsadas < nfurgos/2){
-                Estacion estacionFinal = e.get(i);
-                Estacion estacionInicial = e.get(estaciones.size() - 1);
-                int bicisSobr = bicisSobrantes(estacionInicial);
-                // HAY QUE CALCULAR EL COSTE DE LA RUTA
-                Ruta ruta = new Ruta(estacionInicial, estacionFinal, estacionFinal ,bicisSobr, bicisSobr, 0, 0);
-                Rutas.add(ruta);
-                estaciones.put(estacionFinal, estaciones.get(estacionFinal)+bicisSobr);
-                estaciones.put(estacionInicial, estaciones.get(estacionInicial)-bicisSobr);
-                ++furgosUsadas;
+
+        for (int i = 0; i < nfurgos && i < nestaciones; i += 2) {
+            Estacion e1 = e.get(i);
+            Estacion e2 = e.get(i+1);
+
+            if (bicisSobrantes(e1) != 0) {
+                añadirFurgoneta(e1, e2, e2, bicisSobrantes(e1), bicisSobrantes(e1), 0);
+                int bR = bicisSobrantes(e1);
+                int bD = bicisSobrantes(e1);
+                estaciones.put(e1, estaciones.get(e1) - bicisSobrantes(e1));
+                estaciones.put(e2, estaciones.get(e2) + bicisSobrantes(e1));
+                System.out.println("Furgo añadida Inicial"
+                        +  ". C: " + coste
+                        + ". D1, N1: " + e1.getDemanda() + " " + bR
+                        + ". bR, bD1, bD2: " + bR + " " + bR + " " + 0
+                        + ". D2, N2: " + e2.getDemanda() + " " + e2.getNumBicicletasNext());
             }
         }
+
         return false;
     }
 
@@ -256,16 +261,16 @@ public class ProbIA5Board {
         //si copiamos una ruta necesitamos su coste anterior, si es una ruta nueva coste empieza en cero
         Ruta rutaNueva = new Ruta(e1, e2, e3, bR, bD1, bD2, 0);
 
+        modificarCoste(rutaNueva);
+
         estaciones.put(e1, getBicisNext(e1) - bR);
-
-
 
         estaciones.put(e2, getBicisNext(e2) + bD1);
 
         estaciones.put(e3, getBicisNext(e3) + bD2);
 
 
-        modificarCoste(rutaNueva);
+
 
         Rutas.add(rutaNueva);
         //System.out.println("Nuevo coste: " + coste);
@@ -277,6 +282,8 @@ public class ProbIA5Board {
         //si copiamos una ruta necesitamos su coste anterior, si es una ruta nueva coste empieza en cero
         Ruta rutaNueva = new Ruta(e1, e2, e3, bR, bD1, bD2, c);
 
+        modificarCoste(rutaNueva);
+
         estaciones.put(e1, getBicisNext(e1) - bR);
 
         estaciones.put(e2, getBicisNext(e2) + bD1);
@@ -284,7 +291,7 @@ public class ProbIA5Board {
         estaciones.put(e3, getBicisNext(e3) + bD2);
 
 
-        modificarCoste(rutaNueva);
+
 
         Rutas.add(rutaNueva);
         //System.out.println("Nuevo coste: " + coste);
@@ -313,13 +320,14 @@ public class ProbIA5Board {
 
         int c = 0;
 
-        int bicicletasTransportadas = ruta.getBicisRecogidas() + ruta.getBicisDejadas1() + ruta.getBicisDejadas2();
-        c += ((bicicletasTransportadas + 9) / 10);
+        //int bicicletasTransportadas = ruta.getBicisRecogidas() + ruta.getBicisDejadas1() + ruta.getBicisDejadas2();
+        //c += ((bicicletasTransportadas + 9) / 10)*kilometros;
 
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
         c -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
 
-        c -= min(ruta.getBicisDejadas2(), bicisNecesarias(ruta.getEstacionFinal2()));
+        // si bicis dejadas 2 es 0 consideramos que no vamos a esa estacion
+        if (ruta.getBicisDejadas2() != 0 && ruta.getEstacionFinal1() != ruta.getEstacionFinal2()) c -= min(ruta.getBicisDejadas2(), bicisNecesarias(ruta.getEstacionFinal2()));
 
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
         c += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
@@ -327,7 +335,6 @@ public class ProbIA5Board {
         coste += c;
         ruta.setCosteRuta(c);
     }
-
 
     /*************************/
     /****** AUXILIARES *******/

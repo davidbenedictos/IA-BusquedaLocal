@@ -40,7 +40,16 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
             }
 
         }
+/*
+        //Eliminar furgo
+        for (ProbIA5Board.Ruta r : padre.getRutas()) {
 
+            ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(),
+                    padre.getNFurgos(), padre.getRutas(), padre.getCoste(), r);
+
+            retval.add(new Successor("Ruta eliminada", sucesor));
+        }
+*/
 
         //AÑADIR FURGO va peor q el anterior añadir furgo
         /*for (Map.Entry<Estacion, Integer> e1 : padre.getEstaciones().entrySet()) {
