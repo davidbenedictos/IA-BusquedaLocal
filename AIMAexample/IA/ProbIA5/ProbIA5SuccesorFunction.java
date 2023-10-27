@@ -24,15 +24,15 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                     if (!e1Used) {
                         for (int bicisR = 0; bicisR <= padre.getBicisNext(e1.getKey()) && bicisR <= 30; ++bicisR) {
                             for (int bicisD = 0; bicisD <= bicisR; ++bicisD) {
-                                ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getCoste());
+                                ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia());
                                 sucesor.añadirFurgoneta(e1.getKey(), e2.getKey(), e2.getKey(), bicisR, bicisD, bicisR - bicisD);
-                                retval.add(new Successor("C: " + sucesor.getCoste() +
-                                        ". eIni " + e1.getKey().getCoordX() + " " + e1.getKey().getCoordY()
+                                retval.add(new Successor("Coste: " + sucesor.getCoste()
                                         + ". eFin1 " + e2.getKey().getCoordX() + " " + e2.getKey().getCoordY()
-                                        + ". D1, N1: " + e1.getKey().getDemanda() + " " + sucesor.getBicisNext(e1.getKey())
+                                        + ". Dem 1, Next 1: " + e1.getKey().getDemanda() + " " + sucesor.getBicisNext(e1.getKey())
                                         + ". bR, bD: " + bicisR + " " + bicisD
-                                        + ". D2, N2: " + +e2.getKey().getDemanda() + " " + sucesor.getBicisNext(e2.getKey())
-                                        + " . E2 BN Original: " + e2.getKey().getNumBicicletasNext(), sucesor));
+                                        + ". Dem 2, Next 2: " + +e2.getKey().getDemanda() + " " + sucesor.getBicisNext(e2.getKey())
+                                        + " . E2 BN Original: " + e2.getKey().getNumBicicletasNext()
+                                        + "distancia ruta: " + sucesor.getDistancia(), sucesor));
                             }
                         }
                     }
@@ -40,19 +40,19 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
             }
 
         }
-/*
+
         //Eliminar furgo
         for (ProbIA5Board.Ruta r : padre.getRutas()) {
 
             ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(),
-                    padre.getNFurgos(), padre.getRutas(), padre.getCoste(), r);
+                    padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia(), r);
 
             retval.add(new Successor("Ruta eliminada", sucesor));
         }
-*/
+
 
         //AÑADIR FURGO va peor q el anterior añadir furgo
-        /*for (Map.Entry<Estacion, Integer> e1 : padre.getEstaciones().entrySet()) {
+        for (Map.Entry<Estacion, Integer> e1 : padre.getEstaciones().entrySet()) {
             for (Map.Entry<Estacion, Integer> e2 : padre.getEstaciones().entrySet()) {
                 for (Map.Entry<Estacion, Integer> e3 : padre.getEstaciones().entrySet()) {
                     if (!e1.equals(e2) && !e2.equals(e3) && !e3.equals(e1) && padre.getNRutas() < padre.getNFurgos()) {
@@ -60,7 +60,7 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                         //POTSER HAURIEM DE MIRAR QUE LA E2 I E3 NO ESTIGUIN EN MÉS DE DOS RUTES
                         if (!e1Used) {
                             ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(),
-                                    padre.getRutas(), padre.getCoste());
+                                    padre.getRutas(), padre.getCoste(), padre.getDistancia());
                             sucesor.añadirFurgoneta(e1.getKey(), e2.getKey(), e3.getKey(), 1, 1, 0);
                             retval.add(new Successor("FA. C: " + sucesor.getCoste() +
                                     ". eIni " + e1.getKey().getCoordX() + " " + e1.getKey().getCoordY()
@@ -73,7 +73,7 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                     }
                 }
             }
-        }*/
+        }
 
 
         //llevar una mas a e1
@@ -85,10 +85,10 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
         for (ProbIA5Board.Ruta r : padre.getRutas()) {
             if (r.getBicisRecogidas() < 30 && padre.getBicisNext(r.getEstacionInicial()) > r.getBicisRecogidas()) {
                 ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(),
-                        padre.getNFurgos(), padre.getRutas(), padre.getCoste(), r);
+                        padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia(), r);
 
                 sucesor.modificarFurgoneta(r.getEstacionInicial(), r.getEstacionFinal1(), r.getEstacionFinal2(),
-                        r.getBicisRecogidas() + 1, r.getBicisDejadas1() + 1, r.getBicisDejadas2(), r.getCosteRuta());
+                        r.getBicisRecogidas() + 1, r.getBicisDejadas1() + 1, r.getBicisDejadas2(), r.getCosteRuta(), r.getDistanciaRuta());
 
                 Estacion e1 = r.getEstacionInicial();
                 Estacion e2 = r.getEstacionFinal1();
@@ -107,12 +107,12 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
         for (ProbIA5Board.Ruta r : padre.getRutas()) {
             if (r.getBicisRecogidas() < 30 && padre.getBicisNext(r.getEstacionInicial()) > r.getBicisRecogidas()) {
                 ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(),
-                        padre.getNFurgos(), padre.getRutas(), padre.getCoste(), r);
+                        padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia(), r);
 
 
 
                 sucesor.modificarFurgoneta(r.getEstacionInicial(), r.getEstacionFinal1(), r.getEstacionFinal2(),
-                        r.getBicisRecogidas() + 1, r.getBicisDejadas1(), r.getBicisDejadas2() + 1, r.getCosteRuta());
+                        r.getBicisRecogidas() + 1, r.getBicisDejadas1(), r.getBicisDejadas2() + 1, r.getCosteRuta(), r.getDistanciaRuta());
 
                 Estacion e1 = r.getEstacionInicial();
                 Estacion e2 = r.getEstacionFinal1();
@@ -131,9 +131,9 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
         for (ProbIA5Board.Ruta r : padre.getRutas()) {
             for (Map.Entry<Estacion, Integer> e1 : padre.getEstaciones().entrySet()) {
                 ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(),
-                        padre.getRutas(), padre.getCoste(), r);
+                        padre.getRutas(), padre.getCoste(), padre.getDistancia(), r);
                 sucesor.modificarFurgoneta(e1.getKey(), r.getEstacionFinal1(), r.getEstacionFinal2(),
-                        r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2(), r.getCosteRuta());
+                        r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2(), r.getCosteRuta(), r.getDistanciaRuta());
 
 
                 Estacion e2 = r.getEstacionFinal1();
@@ -152,9 +152,9 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
         for (ProbIA5Board.Ruta r : padre.getRutas()) {
             for (Map.Entry<Estacion, Integer> e2 : padre.getEstaciones().entrySet()) {
                 ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(),
-                        padre.getRutas(), padre.getCoste(), r);
+                        padre.getRutas(), padre.getCoste(), padre.getDistancia(), r);
                 sucesor.modificarFurgoneta(r.getEstacionInicial(), e2.getKey(), r.getEstacionFinal2(),
-                        r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2(), r.getCosteRuta());
+                        r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2(), r.getCosteRuta(), r.getDistanciaRuta());
 
                 Estacion e1 = r.getEstacionInicial();
                 Estacion e3 = r.getEstacionFinal2();
@@ -172,9 +172,9 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
         for (ProbIA5Board.Ruta r : padre.getRutas()) {
             for (Map.Entry<Estacion, Integer> e3 : padre.getEstaciones().entrySet()) {
                 ProbIA5Board sucesor = new ProbIA5Board(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(),
-                        padre.getRutas(), padre.getCoste(), r);
+                        padre.getRutas(), padre.getCoste(), padre.getDistancia(), r);
                 sucesor.modificarFurgoneta(r.getEstacionInicial(), r.getEstacionFinal1(), e3.getKey(),
-                        r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2(), r.getCosteRuta());
+                        r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2(), r.getCosteRuta(), r.getDistanciaRuta());
 
 
                 Estacion e1 = r.getEstacionInicial();

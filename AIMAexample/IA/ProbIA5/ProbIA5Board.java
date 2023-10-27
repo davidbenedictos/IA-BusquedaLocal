@@ -22,6 +22,7 @@ public class ProbIA5Board {
         private int nbicisDejadas2;
 
         private int costeRuta;
+        private float distanciaRuta;
 
 
 
@@ -33,7 +34,8 @@ public class ProbIA5Board {
             this.nbicisDejadas1 = n2;
             this.nbicisDejadas2 = n3;
             costeRuta = c;
-
+            distanciaRuta = distanciaEstaciones(e1, e2);
+            if (e2 != e3) distanciaRuta += distanciaEstaciones(e2, e3);
         }
 
         public Estacion getEstacionInicial() {
@@ -68,8 +70,16 @@ public class ProbIA5Board {
             return costeRuta;
         }
 
+        public float getDistanciaRuta(){
+            return distanciaRuta;
+        }
+
         public void setCosteRuta(int costeRuta) {
             this.costeRuta = costeRuta;
+        }
+
+        public void setDistanciaRuta(float distanciaRuta){
+            this.distanciaRuta = distanciaRuta;
         }
 
         public void setEstacionIni(Estacion e1) {
@@ -103,6 +113,7 @@ public class ProbIA5Board {
     private ArrayList<Ruta> Rutas;
     private Map<Estacion, Integer> estaciones;
     private float coste;
+    private float distancia;
 
 
 
@@ -118,6 +129,7 @@ public class ProbIA5Board {
         nbicis = nb;
         nestaciones = e.size();
         nfurgos = nf;
+        distancia = 0;
         for (int i = 0; i < e.size(); ++i) {
             estaciones.put(e.get(i), e.get(i).getNumBicicletasNext());
         }
@@ -129,7 +141,7 @@ public class ProbIA5Board {
 
     }
 
-    public ProbIA5Board(Map<Estacion, Integer> e, int nb, int nf, ArrayList<Ruta> r, float c) {
+    public ProbIA5Board(Map<Estacion, Integer> e, int nb, int nf, ArrayList<Ruta> r, float c, float dist) {
         estaciones = new HashMap<>();
 
         for (Map.Entry<Estacion, Integer> entry : e.entrySet()) {
@@ -148,12 +160,12 @@ public class ProbIA5Board {
             Rutas.add(copiarRuta(r.get(i)));
         }
 
-
+        distancia = dist;
         coste = c;
     }
 
     //Copia del pare amb totes les copies de rutes, excepte una que no s'afageix
-    public ProbIA5Board(Map<Estacion, Integer> e, int nb, int nf, ArrayList<Ruta> r, float c,  Ruta noAñadir) {
+    public ProbIA5Board(Map<Estacion, Integer> e, int nb, int nf, ArrayList<Ruta> r, float c, float dist,  Ruta noAñadir) {
         estaciones = new HashMap<>();
 
         for (Map.Entry<Estacion, Integer> entry : e.entrySet()) {
@@ -170,7 +182,7 @@ public class ProbIA5Board {
         for (Ruta ruta : r) {
             if (!ruta.equals(noAñadir)) Rutas.add(copiarRuta(ruta));
         }
-
+        distancia = dist;
         coste = c;
     }
 
@@ -198,6 +210,8 @@ public class ProbIA5Board {
     public ArrayList<Ruta> getRutas(){ return Rutas; }
     public float getCoste(){ return coste; }
 
+    public float getDistancia(){ return distancia;}
+
     public int getNRutas() { return Rutas.size(); };
 
     public Integer getBicisNext(Estacion e) {
@@ -223,19 +237,21 @@ public class ProbIA5Board {
             Estacion e2 = e.get(i+1);
 
             if (bicisSobrantes(e1) != 0) {
-                añadirFurgoneta(e1, e2, e2, bicisSobrantes(e1), bicisSobrantes(e1), 0);
+
                 int bR = bicisSobrantes(e1);
-                int bD = bicisSobrantes(e1);
-                estaciones.put(e1, estaciones.get(e1) - bicisSobrantes(e1));
-                estaciones.put(e2, estaciones.get(e2) + bicisSobrantes(e1));
+
                 System.out.println("Furgo añadida Inicial"
                         +  ". C: " + coste
-                        + ". D1, N1: " + e1.getDemanda() + " " + bR
+                        + ". D1, N1: " + e1.getDemanda() + " " + getBicisNext(e1)
                         + ". bR, bD1, bD2: " + bR + " " + bR + " " + 0
-                        + ". D2, N2: " + e2.getDemanda() + " " + e2.getNumBicicletasNext());
+                        + ". D2, N2: " + e2.getDemanda() + " " + getBicisNext(e2));
+
+                añadirFurgoneta(e1, e2, e2, bicisSobrantes(e1), bicisSobrantes(e1), 0);
+
+
             }
         }
-
+        for (Ruta ruta : Rutas) distancia += ruta.getDistanciaRuta();
         return false;
     }
 
@@ -257,17 +273,21 @@ public class ProbIA5Board {
 
     //Nova ruta. De momento solo puede tener una estación final
     //Bicis recogidas <= nbicis en e1 && Bicis recogidas <= 30
-    public void añadirFurgoneta(Estacion e1, Estacion e2, Estacion e3, Integer bR, Integer bD1, Integer bD2) {
+    public void añadirFurgoneta(Estacion e1, Estacion e2, Estacion e3, int bR, int bD1, int bD2) {
         //si copiamos una ruta necesitamos su coste anterior, si es una ruta nueva coste empieza en cero
         Ruta rutaNueva = new Ruta(e1, e2, e3, bR, bD1, bD2, 0);
 
         modificarCoste(rutaNueva);
+        distancia += rutaNueva.getDistanciaRuta();
 
         estaciones.put(e1, getBicisNext(e1) - bR);
 
         estaciones.put(e2, getBicisNext(e2) + bD1);
 
         estaciones.put(e3, getBicisNext(e3) + bD2);
+
+
+
 
 
 
@@ -278,12 +298,13 @@ public class ProbIA5Board {
 
     //c es el coste de la ruta antes de modificar alguno de sus aspectos, hay que recalcular el coste de esa ruta una vez
     //modificada la ruta
-    public void modificarFurgoneta(Estacion e1, Estacion e2, Estacion e3, Integer bR, Integer bD1, Integer bD2, int c) {
+    public void modificarFurgoneta(Estacion e1, Estacion e2, Estacion e3, Integer bR, Integer bD1, Integer bD2, int c, float d) {
         //si copiamos una ruta necesitamos su coste anterior, si es una ruta nueva coste empieza en cero
         Ruta rutaNueva = new Ruta(e1, e2, e3, bR, bD1, bD2, c);
 
-        modificarCoste(rutaNueva);
 
+
+        modificarCoste(rutaNueva);
         estaciones.put(e1, getBicisNext(e1) - bR);
 
         estaciones.put(e2, getBicisNext(e2) + bD1);
@@ -291,6 +312,8 @@ public class ProbIA5Board {
         estaciones.put(e3, getBicisNext(e3) + bD2);
 
 
+        distancia -= d;
+        distancia += rutaNueva.getDistanciaRuta();
 
 
         Rutas.add(rutaNueva);
