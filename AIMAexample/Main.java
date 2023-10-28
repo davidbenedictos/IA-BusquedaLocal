@@ -1,15 +1,13 @@
 import IA.Bicing.Estaciones;
-import IA.ProbIA5.ProbIA5Board;
-import IA.ProbIA5.ProbIA5GoalTest;
-import IA.ProbIA5.ProbIA5HeuristicFunction;
-import IA.ProbIA5.ProbIA5SuccesorFunction;
-import aima.search.framework.GraphSearch;
+import IA.ProbIA5.BicingBoard;
+import IA.ProbIA5.BicingGoalTest;
+import IA.ProbIA5.BicingHeuristicFunction;
+import IA.ProbIA5.BicingSuccesorFunction;
 import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
-import aima.search.informed.AStarSearch;
 import aima.search.informed.HillClimbingSearch;
-import aima.search.informed.IterativeDeepeningAStarSearch;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -21,39 +19,29 @@ public class Main {
          *  For a problem to be solvable:
          *    count(0,prob) % 2 == count(0,sol) %2
          */
-        long tiempoInicial = System.nanoTime();
         Estaciones e = new Estaciones(25, 1250, 0, 1234);
-        ProbIA5Board board = new ProbIA5Board(e, 1250, 5);
-        // board.showState();
+        BicingBoard board = new BicingBoard(e, 1250, 5);
 
-        // Create the Problem object
 
-         Problem p = new  Problem(board,
-                                new ProbIA5SuccesorFunction(),
-                                new ProbIA5GoalTest(),
-                                new ProbIA5HeuristicFunction());
+        long tiempoInicial = System.nanoTime();
+        Problem p = new  Problem(board,
+                new BicingSuccesorFunction(),
+                new BicingGoalTest(),
+                new BicingHeuristicFunction());
         System.out.println("Problem created");
-        // Instantiate the search algorithm
-	    // AStarSearch(new GraphSearch()) or IterativeDeepeningAStarSearch()
         Search search = new HillClimbingSearch();
-
-        // Instantiate the SearchAgent object
         SearchAgent agent = new SearchAgent(p, search);
-
-	// We print the results of the search
+        // We print the results of the search
         System.out.println();
         printActions(agent.getActions());
         printInstrumentation(agent.getInstrumentation());
-
-        // You can access also to the goal state using the
-	// method getGoalState of class Search
         long tiempoFinal = System.nanoTime();
         long tiempoEjecucion = tiempoFinal - tiempoInicial;
-
-        // Convertir nanosegundos a milisegundos
         long tiempoEnMilisegundos = tiempoEjecucion / 1000000;
-
         System.out.println("Tiempo de ejecución: " + tiempoEnMilisegundos + " milisegundos");
+
+
+
     }
 
         private static void printInstrumentation(Properties properties) {
