@@ -135,7 +135,7 @@ public class BicingBoard {
 
 
 
-    public BicingBoard(Estaciones e, int nb, int nf) {
+    public BicingBoard(Estaciones e, int nb, int nf, int estadoIni) {
         estaciones = new HashMap<Estacion, Integer>();
         nbicis = nb;
         nestaciones = e.size();
@@ -144,12 +144,12 @@ public class BicingBoard {
         for (int i = 0; i < e.size(); ++i) {
             estaciones.put(e.get(i), e.get(i).getNumBicicletasNext());
         }
-        //estadoInicial1();
-        estadoInicial2(e);
-
-
+        if (estadoIni == 0) {
+            estadoInicial1();
+        } else if (estadoIni == 1) {
+            estadoInicial2(e);
+        }
         coste = 0;
-
     }
 
     public BicingBoard(Map<Estacion, Integer> e, int nb, int nf, ArrayList<Ruta> r, float c, float dist) {
