@@ -21,98 +21,14 @@ public class Main {
         int estadoIni = 1;
 
 
-        for (int i = 0; i < args.length; i++) {
-            switch (args[i]) {
-                case "-e":
-                    try {
-                        nestaciones = Integer.parseInt(args[++i]);
-                    }
-                    catch (NumberFormatException e)
-                    {
-                        System.out.println(args[i] + " is not an integer.");
-                        System.exit(0);
-                    }
-
-                    break;
-
-                case "-b":
-                    try {
-                        nbicis = Integer.parseInt(args[++i]);
-                    }
-                    catch (NumberFormatException e)
-                    {
-                        System.out.println(args[i] + " is not an integer.");
-                        System.exit(0);
-                    }
-
-                    break;
-
-                case "-f":
-                    try {
-                        nfurgos =  Integer.parseInt(args[++i]);
-                    }
-                    catch (NumberFormatException e)
-                    {
-                        System.out.println(args[i] + " is not an integer.");
-                        System.exit(0);
-                    }
-                    break;
-
-                case "-s":
-                    try {
-                        seed = Integer.parseInt(args[++i]);
-                    }
-                    catch (NumberFormatException e)
-                    {
-                        System.out.println(args[i] + " is not an integer.");
-                        System.exit(0);
-                    }
-                    break;
-
-                case "-i":
-                    try {
-                        estadoIni =  Integer.parseInt(args[++i]);
-                    }
-                    catch (NumberFormatException e)
-                    {
-                        System.out.println(args[i] + " is not an integer.");
-                        System.exit(0);
-                    }
-                    break;
-
-                case "-h":
-                    try {
-                        heuristic = Integer.parseInt(args[++i]);
-                    } catch (NumberFormatException e) {
-                        System.out.println(args[i] + "is not an integer.");
-                        System.exit(0);
-                    }
-                    break;
-
-                default:
-                    // arg
-                    System.out.println("La opción " + args[i] + " no es válida.");
-                    System.out.println("-e [Número de estaciones] ");
-                    System.out.println("-b [Número de bicis]");
-                    System.out.println("-f [Número de furgonetas]");
-                    System.out.println("-s [Seed]");
-                    System.out.println("-i [Estado Inicial algoritmo (0/1)]");
-                    System.out.println("-h [Función Heuristica (0/1)]");
-                    System.exit(0);
-                    break;
-            }
-        }
-
         Estaciones e = new Estaciones(nestaciones, nbicis, demanda, seed);
-        BicingBoard board = new BicingBoard(e, nbicis, nfurgos, estadoIni);
+        BicingBoard board = new BicingBoard(e, nbicis, nfurgos, estadoIni, heuristic);
 
         if(heuristic == 0) {
             BicingHillClimbingSearch(board);
         } else if (heuristic == 1) {
             BicingHillClimbingSearchDistance(board);
         }
-
-
     }
 
 

@@ -126,6 +126,8 @@ public class BicingBoard {
     private float coste;
     private float distancia;
 
+    private int heuristica;
+
 
 
 
@@ -135,7 +137,7 @@ public class BicingBoard {
 
 
 
-    public BicingBoard(Estaciones e, int nb, int nf, int estadoIni) {
+    public BicingBoard(Estaciones e, int nb, int nf, int estadoIni, int h) {
         estaciones = new HashMap<Estacion, Integer>();
         nbicis = nb;
         nestaciones = e.size();
@@ -150,6 +152,7 @@ public class BicingBoard {
             estadoInicial2(e);
         }
         coste = 0;
+        heuristica = h;
     }
 
     public BicingBoard(Map<Estacion, Integer> e, int nb, int nf, ArrayList<Ruta> r, float c, float dist) {
@@ -228,6 +231,8 @@ public class BicingBoard {
     public Integer getBicisNext(Estacion e) {
         return estaciones.get(e);
     }
+
+    public int getHeuristica() { return heuristica; };
 
 
     /********************************/
