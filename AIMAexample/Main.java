@@ -4,6 +4,7 @@ import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
 import aima.search.informed.HillClimbingSearch;
+import aima.search.informed.SimulatedAnnealingSearch;
 
 import java.util.Iterator;
 import java.util.List;
@@ -26,8 +27,10 @@ public class Main {
 
         if(heuristic == 0) {
             BicingHillClimbingSearch(board);
+            //BicingSimulatedAnnealingSearch(board);
         } else if (heuristic == 1) {
             BicingHillClimbingSearchDistance(board);
+            //BicingSimulatedAnnealingSearchDistance(board);
         }
     }
 
@@ -75,6 +78,56 @@ public class Main {
             System.out.println(newBoard.getCoste());
             printInstrumentation(agent.getInstrumentation());
             System.out.println("Tiempo de ejecución: " + time + " milisegundos");
+            System.out.println();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void BicingSimulatedAnnealingSearch(BicingBoard board) {
+        System.out.println("\nBicing HillClimbing  -->");
+        try {
+            long time = System.currentTimeMillis();
+            Problem problem =  new Problem(board,
+                    new BicingSuccesorFunctionSA(),
+                    new BicingGoalTest(),
+                    new BicingHeuristicFunction());
+            System.out.println("Problem created");
+            Search search =  new SimulatedAnnealingSearch(25000,100,25,0.01);
+            SearchAgent agent = new SearchAgent(problem,search);
+            System.out.println();
+            printActions(agent.getActions());
+            BicingBoard newBoard = (BicingBoard) search.getGoalState();
+            time = System.currentTimeMillis() - time;
+            System.out.println(newBoard.getCoste());
+            printInstrumentation(agent.getInstrumentation());
+            System.out.println(time + " ms");
+            System.out.println();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void BicingSimulatedAnnealingSearchDistance(BicingBoard board) {
+        System.out.println("\nBicing HillClimbing  -->");
+        try {
+            long time = System.currentTimeMillis();
+            Problem problem =  new Problem(board,
+                    new BicingSuccesorFunctionSA(),
+                    new BicingGoalTest(),
+                    new BicingHeuristicFunctionDistance());
+            System.out.println("Problem created");
+            Search search =  new SimulatedAnnealingSearch(25000,100,25,0.01);
+            SearchAgent agent = new SearchAgent(problem,search);
+            System.out.println();
+            printActions(agent.getActions());
+            BicingBoard newBoard = (BicingBoard) search.getGoalState();
+            time = System.currentTimeMillis() - time;
+            System.out.println(newBoard.getCoste());
+            printInstrumentation(agent.getInstrumentation());
+            System.out.println(time + " ms");
             System.out.println();
 
         } catch (Exception e) {
