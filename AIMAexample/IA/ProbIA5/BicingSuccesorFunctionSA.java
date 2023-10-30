@@ -26,14 +26,14 @@ public class BicingSuccesorFunctionSA implements SuccessorFunction{
             j = myRandom.nextInt(padre.getNEstaciones());
         } while (i == j);
         */
-
+        System.out.println("Entramos sucesor");
         Random random = new Random();
         int Operador = 0;
         while(true){
 
-            Operador = generateRandom(random, 1, 2);
+            Operador = generateRandom(random, 0, 1);
             //Añade furgoneta Random
-            if (Operador == 1 && padre.getNRutas() < padre.getNRutas()) {
+            if (Operador == 0 && padre.getNRutas() < padre.getNFurgos()) {
                 Estacion e1 = padre.getVectorEstaciones().get(generateRandom(random, 0, padre.getNEstaciones() - 1));
                 Estacion e2 = padre.getVectorEstaciones().get(generateRandom(random, 0, padre.getNEstaciones() - 1));
                 Estacion e3 = padre.getVectorEstaciones().get(generateRandom(random, 0, padre.getNEstaciones() - 1));
@@ -49,104 +49,91 @@ public class BicingSuccesorFunctionSA implements SuccessorFunction{
                 }
             }
             //Eliminar furgo
-            else if(Operador == 2 && padre.getNRutas() > 0){
+
+            else if(Operador == 1 && padre.getNRutas() > 0){
                 int r = generateRandom(random, 0, padre.getNRutas()-1);
                 BicingBoard sucesor = new BicingBoard(padre.getEstaciones(), padre.getVectorEstaciones(), padre.getNBicis(),
                         padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia(), padre.getRutas().get(r));
                 retval.add(new Successor("Furgo eliminada", sucesor));
                 return retval;
             }
+            //Afegir una bici a E2 random
+            else if(Operador == 2 && padre.getNRutas() > 0){
+                int r = generateRandom(random, 0, padre.getNRutas()-1);
+                if((padre.getRutas().get(r).getNBicis() < 30 )&& (padre.getBicisNext(padre.getRutas().get(r).getEstacionInicial()) > padre.getRutas().get(r).getBicisRecogidas())) {
+                    BicingBoard sucesor = new BicingBoard(padre.getEstaciones(), padre.getVectorEstaciones(), padre.getNBicis(),
+                            padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia(), padre.getRutas().get(r));
+
+                    sucesor.modificarFurgoneta(padre.getRutas().get(r).getEstacionInicial(), padre.getRutas().get(r).getEstacionFinal1(), padre.getRutas().get(r).getEstacionFinal2(),
+                            padre.getRutas().get(r).getBicisRecogidas() + 1, padre.getRutas().get(r).getBicisDejadas1() + 1, padre.getRutas().get(r).getBicisDejadas2(), padre.getRutas().get(r).getCosteRuta(), padre.getRutas().get(r).getDistanciaRuta());
+                    retval.add(new Successor("Añadimos bici a E2 random", sucesor));
+                    return retval;
+                }
+            }
+
+            //Afegir una bici a E3random
+            else if(Operador == 3 && padre.getNRutas() > 0){
+                int r = generateRandom(random, 0, padre.getNRutas()-1);
+                if((padre.getRutas().get(r).getNBicis() < 30 )&& ((padre.getBicisNext(padre.getRutas().get(r).getEstacionInicial()) > padre.getRutas().get(r).getBicisRecogidas()))) {
+                    BicingBoard sucesor = new BicingBoard(padre.getEstaciones(), padre.getVectorEstaciones(), padre.getNBicis(),
+                            padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia(), padre.getRutas().get(r));
+
+                    sucesor.modificarFurgoneta(padre.getRutas().get(r).getEstacionInicial(), padre.getRutas().get(r).getEstacionFinal1(), padre.getRutas().get(r).getEstacionFinal2(), padre.getRutas().get(r).getBicisRecogidas() + 1, padre.getRutas().get(r).getBicisDejadas1(), padre.getRutas().get(r).getBicisDejadas2() + 1, padre.getRutas().get(r).getCosteRuta(), padre.getRutas().get(r).getDistanciaRuta());
+                    retval.add(new Successor("Añadimos bici a E3 random", sucesor));
+                    return retval;
+                }
+            }
+
+            //CAMBIAR ESTACION INICIAL INICIAL
+            else if(Operador == 4 && padre.getNRutas() > 0){
+                int r = generateRandom(random, 0, padre.getNRutas()-1);
+                Estacion e1 = padre.getVectorEstaciones().get(generateRandom(random, 0, padre.getNEstaciones() - 1));
+                BicingBoard sucesor = new BicingBoard(padre.getEstaciones(), padre.getVectorEstaciones(), padre.getNBicis(),
+                        padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia(), padre.getRutas().get(r));
+                sucesor.modificarFurgoneta(e1, padre.getRutas().get(r).getEstacionFinal1(), padre.getRutas().get(r).getEstacionFinal2(),
+                        padre.getRutas().get(r).getBicisRecogidas(), padre.getRutas().get(r).getBicisDejadas1(), padre.getRutas().get(r).getBicisDejadas2(), padre.getRutas().get(r).getCosteRuta(), padre.getRutas().get(r).getDistanciaRuta());
+                retval.add(new Successor("Cambiamos estacion inicial", sucesor));
+                return retval;
+            }
+
+            //CAMBIAR ESTACION FINAL 1
+
+            else if(Operador == 5 && padre.getNRutas() > 0){
+                int r = generateRandom(random, 0, padre.getNRutas()-1);
+                Estacion e2 = padre.getVectorEstaciones().get(generateRandom(random, 0, padre.getNEstaciones() - 1));
+                BicingBoard sucesor = new BicingBoard(padre.getEstaciones(),  padre.getVectorEstaciones(), padre.getNBicis(), padre.getNFurgos(),
+                        padre.getRutas(), padre.getCoste(), padre.getDistancia(), padre.getRutas().get(r));
+                sucesor.modificarFurgoneta(padre.getRutas().get(r).getEstacionInicial(), e2, padre.getRutas().get(r).getEstacionFinal2(),
+                        padre.getRutas().get(r).getBicisRecogidas(), padre.getRutas().get(r).getBicisDejadas1(), padre.getRutas().get(r).getBicisDejadas2(), padre.getRutas().get(r).getCosteRuta(), padre.getRutas().get(r).getDistanciaRuta());
+                retval.add(new Successor("Cambiamos estacion final", sucesor));
+                return retval;
+            }
+
+            //CAMBIAR ESTACION FINAL 2
+            int r = generateRandom(random, 0, padre.getNRutas()-1);
+            Estacion e2 = padre.getVectorEstaciones().get(generateRandom(random, 0, padre.getNEstaciones() - 1));
+            BicingBoard sucesor = new BicingBoard(padre.getEstaciones(),  padre.getVectorEstaciones(), padre.getNBicis(), padre.getNFurgos(),
+                    padre.getRutas(), padre.getCoste(), padre.getDistancia(), padre.getRutas().get(r));
+            sucesor.modificarFurgoneta(padre.getRutas().get(r).getEstacionInicial(), e2, padre.getRutas().get(r).getEstacionFinal2(),
+                    padre.getRutas().get(r).getBicisRecogidas(), padre.getRutas().get(r).getBicisDejadas1(), padre.getRutas().get(r).getBicisDejadas2(), padre.getRutas().get(r).getCosteRuta(), padre.getRutas().get(r).getDistanciaRuta());
+            retval.add(new Successor("Cambiamos estacion final", sucesor));
+            return retval;
+
+            }
         }
+
 
 
 
 /*
-        //ELIMINAR FURGONETA
-        for (BicingBoard.Ruta r : padre.getRutas()) {
-            BicingBoard sucesor = new BicingBoard(padre.getEstaciones(), padre.getNBicis(),
-                    padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia(), r);
-            retval.add(new Successor("Furgoneta eliminada. Coste: " + sucesor.getCoste() +
-                    ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
-        }
-
-        int l = myRandom.nextInt(padre.getNRutas()); // ruta random
-
-        //UNA BICI MAS A E2
-        for (BicingBoard.Ruta r : padre.getRutas()) {
-            if (r.getBicisRecogidas() < 30 && padre.getBicisNext(r.getEstacionInicial()) > r.getBicisRecogidas()) {
-                BicingBoard sucesor = new BicingBoard(padre.getEstaciones(), padre.getNBicis(),
-                        padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia(), r);
-
-                sucesor.modificarFurgoneta(r.getEstacionInicial(), r.getEstacionFinal1(), r.getEstacionFinal2(),
-                        r.getBicisRecogidas() + 1, r.getBicisDejadas1() + 1, r.getBicisDejadas2(), r.getCosteRuta(), r.getDistanciaRuta());
-
-
-                retval.add(new Successor("Bici añadida estación final 1. Coste: " + sucesor.getCoste() +
-                        ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
-            }
-        }
-
-        int m = myRandom.nextInt(padre.getNRutas()); // ruta random
-
-        //UNA BICI MES A E3
-        for (BicingBoard.Ruta r : padre.getRutas()) {
-            if (r.getBicisRecogidas() < 30 && padre.getBicisNext(r.getEstacionInicial()) > r.getBicisRecogidas()) {
-                BicingBoard sucesor = new BicingBoard(padre.getEstaciones(), padre.getNBicis(),
-                        padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia(), r);
 
 
 
-                sucesor.modificarFurgoneta(r.getEstacionInicial(), r.getEstacionFinal1(), r.getEstacionFinal2(),
-                        r.getBicisRecogidas() + 1, r.getBicisDejadas1(), r.getBicisDejadas2() + 1, r.getCosteRuta(), r.getDistanciaRuta());
 
-                Estacion e1 = r.getEstacionInicial();
-                Estacion e2 = r.getEstacionFinal1();
-                Estacion e3 = r.getEstacionFinal2();
 
-                retval.add(new Successor("Bicicleta añadida estacion final 2. Coste: " + sucesor.getCoste() +
-                        ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
-            }
-        }
 
-        int n, o;
-        n = myRandom.nextInt(padre.getNRutas()); // ruta random
-        o = myRandom.nextInt(padre.getNEstaciones()); // estacion random
 
-        //CAMBIAR ESTACION INICIAL INICIAL
-        for (BicingBoard.Ruta r : padre.getRutas()) {
-            for (Map.Entry<Estacion, Integer> e1 : padre.getEstaciones().entrySet()) {
-                BicingBoard sucesor = new BicingBoard(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(),
-                        padre.getRutas(), padre.getCoste(), padre.getDistancia(), r);
-                sucesor.modificarFurgoneta(e1.getKey(), r.getEstacionFinal1(), r.getEstacionFinal2(),
-                        r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2(), r.getCosteRuta(), r.getDistanciaRuta());
 
-                retval.add(new Successor("Estacion inicial cambiada. Coste: " + sucesor.getCoste() +
-                        ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
-            }
-        }
-
-        int p, q;
-        p = myRandom.nextInt(padre.getNRutas()); // ruta random
-        q = myRandom.nextInt(padre.getNEstaciones()); // estacion random
-
-        //CAMBIAR ESTACION FINAL 1
-        for (BicingBoard.Ruta r : padre.getRutas()) {
-            for (Map.Entry<Estacion, Integer> e2 : padre.getEstaciones().entrySet()) {
-                BicingBoard sucesor = new BicingBoard(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(),
-                        padre.getRutas(), padre.getCoste(), padre.getDistancia(), r);
-                sucesor.modificarFurgoneta(r.getEstacionInicial(), e2.getKey(), r.getEstacionFinal2(),
-                        r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2(), r.getCosteRuta(), r.getDistanciaRuta());
-
-                retval.add(new Successor("Estacion final 1 cambiada. Coste: " + sucesor.getCoste() +
-                        ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
-            }
-        }
-
-        int t, s;
-        t = myRandom.nextInt(padre.getNRutas()); // ruta random
-        s = myRandom.nextInt(padre.getNEstaciones()); // estacion random
-
-        //CAMBIAR ESTACION FINAL 2
         for (BicingBoard.Ruta r : padre.getRutas()) {
             for (Map.Entry<Estacion, Integer> e3 : padre.getEstaciones().entrySet()) {
                 BicingBoard sucesor = new BicingBoard(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(),
@@ -155,11 +142,8 @@ public class BicingSuccesorFunctionSA implements SuccessorFunction{
                         r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2(), r.getCosteRuta(), r.getDistanciaRuta());
 
 
-                Estacion e1 = r.getEstacionInicial();
-                Estacion e2 = r.getEstacionFinal1();
 
-                retval.add(new Successor("Estacion final 2 cambiada. Coste: " + sucesor.getCoste() +
-                        ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
+
             }
         }
 
@@ -170,5 +154,3 @@ public class BicingSuccesorFunctionSA implements SuccessorFunction{
 
  */
     }
-
-}
