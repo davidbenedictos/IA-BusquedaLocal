@@ -20,7 +20,7 @@ Otra forma de hacerlo es desde un editor siempre y cuando tengs una opción de e
 
 Es imprescindible que este fichero se encuentre en el mismo directorio que todos los archivos `.java` del proyecto y que los archivos `AIMA.jar`.
 
-Una vez ejecutado, irán apareciendo por la terminal las diferentes acciones que harán los algoritmos para la heurística elegida y el coste final.
+Una vez ejecutado, irán apareciendo por la terminal de manera secuencial las diferentes acciones que harán los algoritmos para la heurística elegida y el coste final.
 
 
 ## Modificación de otros elementos del problema
