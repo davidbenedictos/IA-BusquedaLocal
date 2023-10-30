@@ -6,11 +6,19 @@ import aima.search.framework.Successor;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
 
 public class BicingSuccesorFunctionSA implements SuccessorFunction{
     public ArrayList getSuccessors(Object state) {
         ArrayList retval = new ArrayList<BicingBoard>();
         BicingBoard padre = (BicingBoard) state;
+        Random myRandom = new Random();
+        int i, j;
+        //generem numeros random per a pillar estacions random
+        i = myRandom.nextInt(padre.getNEstaciones());
+        do {
+            j = myRandom.nextInt(padre.getNEstaciones());
+        } while (i == j);
 
         //AÑADIR FURGONETA
         for (Map.Entry<Estacion, Integer> e1 : padre.getEstaciones().entrySet()) {
@@ -31,6 +39,7 @@ public class BicingSuccesorFunctionSA implements SuccessorFunction{
             }
 
         }
+        int k = myRandom.nextInt(padre.getNFurgos()); // furgo random
 
         //ELIMINAR FURGONETA
         for (BicingBoard.Ruta r : padre.getRutas()) {
@@ -39,6 +48,8 @@ public class BicingSuccesorFunctionSA implements SuccessorFunction{
             retval.add(new Successor("Furgoneta eliminada. Coste: " + sucesor.getCoste() +
                     ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
         }
+
+        int l = myRandom.nextInt(padre.getNRutas()); // ruta random
 
         //UNA BICI MAS A E2
         for (BicingBoard.Ruta r : padre.getRutas()) {
@@ -54,6 +65,8 @@ public class BicingSuccesorFunctionSA implements SuccessorFunction{
                         ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
             }
         }
+
+        int m = myRandom.nextInt(padre.getNRutas()); // ruta random
 
         //UNA BICI MES A E3
         for (BicingBoard.Ruta r : padre.getRutas()) {
@@ -75,6 +88,10 @@ public class BicingSuccesorFunctionSA implements SuccessorFunction{
             }
         }
 
+        int n, o;
+        n = myRandom.nextInt(padre.getNRutas()); // ruta random
+        o = myRandom.nextInt(padre.getNEstaciones()); // estacion random
+
         //CAMBIAR ESTACION INICIAL INICIAL
         for (BicingBoard.Ruta r : padre.getRutas()) {
             for (Map.Entry<Estacion, Integer> e1 : padre.getEstaciones().entrySet()) {
@@ -88,6 +105,10 @@ public class BicingSuccesorFunctionSA implements SuccessorFunction{
             }
         }
 
+        int p, q;
+        p = myRandom.nextInt(padre.getNRutas()); // ruta random
+        q = myRandom.nextInt(padre.getNEstaciones()); // estacion random
+
         //CAMBIAR ESTACION FINAL 1
         for (BicingBoard.Ruta r : padre.getRutas()) {
             for (Map.Entry<Estacion, Integer> e2 : padre.getEstaciones().entrySet()) {
@@ -100,6 +121,10 @@ public class BicingSuccesorFunctionSA implements SuccessorFunction{
                         ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
             }
         }
+
+        int t, s;
+        t = myRandom.nextInt(padre.getNRutas()); // ruta random
+        s = myRandom.nextInt(padre.getNEstaciones()); // estacion random
 
         //CAMBIAR ESTACION FINAL 2
         for (BicingBoard.Ruta r : padre.getRutas()) {

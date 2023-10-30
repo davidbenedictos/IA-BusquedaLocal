@@ -18,7 +18,7 @@ public class Main {
         int demanda = 0;
         int seed = 1234;
         int nfurgos = 5;
-        int heuristic = 1;
+        int heuristic = 0;
         int estadoIni = 1;
 
 
@@ -27,7 +27,7 @@ public class Main {
 
         if(heuristic == 0) {
             BicingHillClimbingSearch(board);
-            //BicingSimulatedAnnealingSearch(board);
+            BicingSimulatedAnnealingSearch(board);
         } else if (heuristic == 1) {
             BicingHillClimbingSearchDistance(board);
             //BicingSimulatedAnnealingSearchDistance(board);
@@ -86,7 +86,7 @@ public class Main {
     }
 
     private static void BicingSimulatedAnnealingSearch(BicingBoard board) {
-        System.out.println("\nBicing HillClimbing  -->");
+        System.out.println("\nBicing SimulatedAnnealing  -->");
         try {
             long time = System.currentTimeMillis();
             Problem problem =  new Problem(board,
@@ -111,7 +111,7 @@ public class Main {
     }
 
     private static void BicingSimulatedAnnealingSearchDistance(BicingBoard board) {
-        System.out.println("\nBicing HillClimbing  -->");
+        System.out.println("\nBicing SimulatedAnnealingDistance  -->");
         try {
             long time = System.currentTimeMillis();
             Problem problem =  new Problem(board,

@@ -350,7 +350,8 @@ public class BicingBoard {
         int c = 0;
 
         int bicicletasTransportadas = ruta.getBicisRecogidas() + ruta.getBicisDejadas1() + ruta.getBicisDejadas2();
-        c += (((bicicletasTransportadas + 9) / 10)*d*0.001);
+        //if (getHeuristica() == 1)
+            c += (((bicicletasTransportadas + 9) / 10)*d*0.001);
 
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
         c -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
