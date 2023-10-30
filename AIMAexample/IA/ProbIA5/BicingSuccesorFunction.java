@@ -22,8 +22,7 @@ public class BicingSuccesorFunction implements SuccessorFunction{
                             for (int bicisD = 0; bicisD <= bicisR; ++bicisD) {
                                 BicingBoard sucesor = new BicingBoard(padre.getEstaciones(), padre.getNBicis(), padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia());
                                 sucesor.añadirFurgoneta(e1.getKey(), e2.getKey(), e2.getKey(), bicisR, bicisD, bicisR - bicisD);
-                                retval.add(new Successor("Furgoneta añadida. Coste: " + sucesor.getCoste() +
-                                        ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
+                                retval.add(new Successor("Furgoneta añadida. Coste: " + sucesor.getCoste(), sucesor));
                             }
                         }
                     }
@@ -36,8 +35,7 @@ public class BicingSuccesorFunction implements SuccessorFunction{
         for (BicingBoard.Ruta r : padre.getRutas()) {
             BicingBoard sucesor = new BicingBoard(padre.getEstaciones(), padre.getNBicis(),
                     padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia(), r);
-            retval.add(new Successor("Furgoneta eliminada. Coste: " + sucesor.getCoste() +
-                    ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
+            retval.add(new Successor("Furgoneta eliminada. Coste: " + sucesor.getCoste(), sucesor));
         }
 
         //UNA BICI MAS A E2
@@ -50,8 +48,7 @@ public class BicingSuccesorFunction implements SuccessorFunction{
                         r.getBicisRecogidas() + 1, r.getBicisDejadas1() + 1, r.getBicisDejadas2(), r.getCosteRuta(), r.getDistanciaRuta());
 
 
-                retval.add(new Successor("Bici añadida estación final 1. Coste: " + sucesor.getCoste() +
-                        ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
+                retval.add(new Successor("Bici añadida estación final 1. Coste: " + sucesor.getCoste(), sucesor));
             }
         }
 
@@ -70,8 +67,7 @@ public class BicingSuccesorFunction implements SuccessorFunction{
                 Estacion e2 = r.getEstacionFinal1();
                 Estacion e3 = r.getEstacionFinal2();
 
-                retval.add(new Successor("Bicicleta añadida estacion final 2. Coste: " + sucesor.getCoste() +
-                        ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
+                retval.add(new Successor("Bicicleta añadida estacion final 2. Coste: " + sucesor.getCoste(), sucesor));
             }
         }
 
@@ -83,8 +79,7 @@ public class BicingSuccesorFunction implements SuccessorFunction{
                 sucesor.modificarFurgoneta(e1.getKey(), r.getEstacionFinal1(), r.getEstacionFinal2(),
                         r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2(), r.getCosteRuta(), r.getDistanciaRuta());
 
-                retval.add(new Successor("Estacion inicial cambiada. Coste: " + sucesor.getCoste() +
-                        ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
+                retval.add(new Successor("Estacion inicial cambiada. Coste: " + sucesor.getCoste() , sucesor));
             }
         }
 
@@ -96,8 +91,7 @@ public class BicingSuccesorFunction implements SuccessorFunction{
                 sucesor.modificarFurgoneta(r.getEstacionInicial(), e2.getKey(), r.getEstacionFinal2(),
                         r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2(), r.getCosteRuta(), r.getDistanciaRuta());
 
-                retval.add(new Successor("Estacion final 1 cambiada. Coste: " + sucesor.getCoste() +
-                        ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
+                retval.add(new Successor("Estacion final 1 cambiada. Coste: " + sucesor.getCoste(), sucesor));
             }
         }
 
@@ -113,8 +107,7 @@ public class BicingSuccesorFunction implements SuccessorFunction{
                 Estacion e1 = r.getEstacionInicial();
                 Estacion e2 = r.getEstacionFinal1();
 
-                retval.add(new Successor("Estacion final 2 cambiada. Coste: " + sucesor.getCoste() +
-                        ". Heuristica: " + sucesor.getCoste()*sucesor.getDistancia()*0.001, sucesor));
+                retval.add(new Successor("Estacion final 2 cambiada. Coste: " + sucesor.getCoste(), sucesor));
             }
         }
 

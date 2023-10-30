@@ -27,7 +27,7 @@ public class Main {
 
         if(heuristic == 0) {
             BicingHillClimbingSearch(board);
-            BicingSimulatedAnnealingSearch(board);
+            //BicingSimulatedAnnealingSearch(board);
         } else if (heuristic == 1) {
             BicingHillClimbingSearchDistance(board);
             //BicingSimulatedAnnealingSearchDistance(board);
