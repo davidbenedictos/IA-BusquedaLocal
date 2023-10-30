@@ -28,13 +28,13 @@ public class BicingSuccesorFunction implements SuccessorFunction{
                     }
                 }
             }
-
         }
 
         //ELIMINAR FURGONETA
         for (BicingBoard.Ruta r : padre.getRutas()) {
             BicingBoard sucesor = new BicingBoard(padre.getEstaciones(), padre.getVectorEstaciones(), padre.getNBicis(),
                     padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia(), r);
+
             retval.add(new Successor("Furgoneta eliminada. Coste: " + sucesor.getCoste(), sucesor));
         }
 
@@ -47,7 +47,6 @@ public class BicingSuccesorFunction implements SuccessorFunction{
                 sucesor.modificarFurgoneta(r.getEstacionInicial(), r.getEstacionFinal1(), r.getEstacionFinal2(),
                         r.getBicisRecogidas() + 1, r.getBicisDejadas1() + 1, r.getBicisDejadas2(), r.getCosteRuta(), r.getDistanciaRuta());
 
-
                 retval.add(new Successor("Bici añadida estación final 1. Coste: " + sucesor.getCoste(), sucesor));
             }
         }
@@ -58,14 +57,8 @@ public class BicingSuccesorFunction implements SuccessorFunction{
                 BicingBoard sucesor = new BicingBoard(padre.getEstaciones(), padre.getVectorEstaciones(), padre.getNBicis(),
                         padre.getNFurgos(), padre.getRutas(), padre.getCoste(), padre.getDistancia(), r);
 
-
-
                 sucesor.modificarFurgoneta(r.getEstacionInicial(), r.getEstacionFinal1(), r.getEstacionFinal2(),
                         r.getBicisRecogidas() + 1, r.getBicisDejadas1(), r.getBicisDejadas2() + 1, r.getCosteRuta(), r.getDistanciaRuta());
-
-                Estacion e1 = r.getEstacionInicial();
-                Estacion e2 = r.getEstacionFinal1();
-                Estacion e3 = r.getEstacionFinal2();
 
                 retval.add(new Successor("Bicicleta añadida estacion final 2. Coste: " + sucesor.getCoste(), sucesor));
             }
@@ -103,18 +96,9 @@ public class BicingSuccesorFunction implements SuccessorFunction{
                 sucesor.modificarFurgoneta(r.getEstacionInicial(), r.getEstacionFinal1(), e3.getKey(),
                         r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2(), r.getCosteRuta(), r.getDistanciaRuta());
 
-
-                Estacion e1 = r.getEstacionInicial();
-                Estacion e2 = r.getEstacionFinal1();
-
                 retval.add(new Successor("Estacion final 2 cambiada. Coste: " + sucesor.getCoste(), sucesor));
             }
         }
-
-
-
-
         return retval;
     }
-
 }

@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BicingBoard {
-
     public class Ruta {
         private Estacion estacionIni;
         private Estacion estacionFi1;
@@ -20,22 +19,8 @@ public class BicingBoard {
         private int nbicisRecogidas;
         private int nbicisDejadas1;
         private int nbicisDejadas2;
-
         private int costeRuta;
         private float distanciaRuta;
-
-
-        /*
-        public Ruta(Estacion e1, Estacion e2, Estacion e3, int n1, int n2, int n3, int c) {
-            this.estacionIni = e1;
-            this.estacionFi1 = e2;
-            this.estacionFi2 = e3;
-            this.nbicisRecogidas = n1;
-            this.nbicisDejadas1 = n2;
-            this.nbicisDejadas2 = n3;
-            costeRuta = c;
-            distanciaRuta = distanciaEstaciones(e1, e2);
-            if (e2 != e3) distanciaRuta += distanciaEstaciones(e2, e3);*/
 
         public Ruta(Estacion e1, Estacion e2, Estacion e3, int n1, int n2, int n3, int c, float d) {
             this.estacionIni = e1;
@@ -52,66 +37,43 @@ public class BicingBoard {
         public Estacion getEstacionInicial() {
             return estacionIni;
         }
-
         public Estacion getEstacionFinal1() {
             return estacionFi1;
         }
-
         public Estacion getEstacionFinal2() {
             return estacionFi2;
         }
-
         public int getNBicis() {
             return nbicisRecogidas;
         }
-
         public int getBicisRecogidas() {return nbicisRecogidas;}
-
-
-
         public int getBicisDejadas1() {
             return nbicisDejadas1;
         }
-
         public int getBicisDejadas2() {
             return nbicisDejadas2;
         }
-
         public int getCosteRuta() {
             return costeRuta;
         }
-
         public float getDistanciaRuta(){
             return distanciaRuta;
         }
-
         public void setCosteRuta(int costeRuta) {
             this.costeRuta = costeRuta;
         }
-
         public void setDistanciaRuta(float distanciaRuta){
             this.distanciaRuta = distanciaRuta;
         }
-
         public void setEstacionIni(Estacion e1) {
             estacionIni = e1;
         }
-
         public void setEstacionFi1(Estacion e2) {
             estacionFi1 = e2;
         }
-
-        public void setEstacionFi2(Estacion e3) {
-            estacionFi2 = e3;
-        }
-
-        public void setNbicisDejadas2(int b) {
-            nbicisDejadas2 = b;
-        }
-
-
+        public void setEstacionFi2(Estacion e3) { estacionFi2 = e3; }
+        public void setNbicisDejadas2(int b) { nbicisDejadas2 = b; }
     }
-
 
     /*******************************/
     /***** ATRIBUTOS DE ESTADO *****/
@@ -119,24 +81,17 @@ public class BicingBoard {
 
     private static int nbicis;
     private static int nestaciones;
-
     private int nfurgos;
     private ArrayList<Ruta> Rutas;
     private Map<Estacion, Integer> estaciones;
     private ArrayList<Estacion> vectorEstaciones;
     private float coste;
     private float distancia;
-
     private int heuristica;
-
-
-
 
     /**************************/
     /******* CREADORAS ********/
     /**************************/
-
-
 
     public BicingBoard(Estaciones e, int nb, int nf, int estadoIni, int h) {
         estaciones = new HashMap<Estacion, Integer>();
@@ -165,8 +120,6 @@ public class BicingBoard {
             Integer value = entry.getValue();
             estaciones.put(key, value);
         }
-
-
         nbicis = nb;
         nestaciones = e.size();
         nfurgos = nf;
@@ -175,12 +128,10 @@ public class BicingBoard {
         for (int i = 0; i < r.size(); ++i) {
             Rutas.add(copiarRuta(r.get(i)));
         }
-
         distancia = dist;
         coste = c;
     }
 
-    //Copia del pare amb totes les copies de rutes, excepte una que no s'afageix
     public BicingBoard(Map<Estacion, Integer> e, ArrayList<Estacion> ve, int nb, int nf, ArrayList<Ruta> r, float c, float dist, Ruta noAñadir) {
         estaciones = new HashMap<>();
         vectorEstaciones = ve;
@@ -207,35 +158,21 @@ public class BicingBoard {
                 r.getBicisRecogidas(), r.getBicisDejadas1(), r.getBicisDejadas2(), r.getCosteRuta(), r.getCosteRuta());
     }
 
-
     /*********************/
     /****** GETTERS ******/
     /*********************/
 
-
-    //Devuelve en que posicion del vector estaciones se encuentra la estación con coordenadas x e y
-
     public int getNBicis() { return nbicis; }
-
     public int getNEstaciones() { return nestaciones; }
-
     public int getNFurgos() { return nfurgos; }
-
     public Map<Estacion, Integer> getEstaciones() { return estaciones; }
     public ArrayList<Estacion> getVectorEstaciones() { return vectorEstaciones; }
-
     public ArrayList<Ruta> getRutas(){ return Rutas; }
     public float getCoste(){ return coste; }
-
-    public float getDistancia(){ return distancia;}
-
-    public int getNRutas() { return Rutas.size(); };
-
-    public Integer getBicisNext(Estacion e) {
-        return estaciones.get(e);
-    }
-
-    public int getHeuristica() { return heuristica; };
+    public float getDistancia(){ return distancia; }
+    public int getNRutas() { return Rutas.size(); }
+    public Integer getBicisNext(Estacion e) { return estaciones.get(e); }
+    public int getHeuristica() { return heuristica; }
 
 
     /********************************/
@@ -248,126 +185,68 @@ public class BicingBoard {
     }
 
     public boolean estadoInicial2(Estaciones e) {
-
         Rutas = new ArrayList<>();
-
         for (int i = 0; i < nfurgos && i < nestaciones; i += 2) {
             Estacion e1 = e.get(i);
             Estacion e2 = e.get(i+1);
-
             if (bicisSobrantes(e1) != 0) {
-
                 int bR = bicisSobrantes(e1);
-
                 System.out.println("Furgo Inicial añadida Inicial. "
                         +  "Coste " + getCoste() + ". Heuristica: " + getCoste()*getDistancia()*0.001);
-
                 añadirFurgoneta(e1, e2, e2, bicisSobrantes(e1), bicisSobrantes(e1), 0);
-
-
             }
         }
         for (Ruta ruta : Rutas) distancia += ruta.getDistanciaRuta();
-        return false;
-    }
-
-
-    public void ordenarEstacionesPorDiferencia(List<Estacion> e) {
-        Collections.sort(e, new Comparator<Estacion>() {
-            @Override
-            public int compare(Estacion estacion1, Estacion estacion2) {
-                int diferencia1 = bicisNecesarias(estacion1);
-                int diferencia2 = bicisNecesarias(estacion2);
-                return Integer.compare(diferencia2, diferencia1);
-            }
-        });
+        return true;
     }
 
     /*************************/
     /****** OPERADORES *******/
     /*************************/
 
-    //Nova ruta. De momento solo puede tener una estación final
-    //Bicis recogidas <= nbicis en e1 && Bicis recogidas <= 30
     public void añadirFurgoneta(Estacion e1, Estacion e2, Estacion e3, int bR, int bD1, int bD2) {
-        //si copiamos una ruta necesitamos su coste anterior, si es una ruta nueva coste empieza en cero
         Ruta rutaNueva = new Ruta(e1, e2, e3, bR, bD1, bD2, 0, 0);
-
         modificarCoste(rutaNueva);
-
-
         estaciones.put(e1, getBicisNext(e1) - bR);
-
         estaciones.put(e2, getBicisNext(e2) + bD1);
-
         estaciones.put(e3, getBicisNext(e3) + bD2);
-
-
-
-
-
-
-
         Rutas.add(rutaNueva);
-        //System.out.println("Nuevo coste: " + coste);
     }
 
-    //c es el coste de la ruta antes de modificar alguno de sus aspectos, hay que recalcular el coste de esa ruta una vez
-    //modificada la ruta
     public void modificarFurgoneta(Estacion e1, Estacion e2, Estacion e3, Integer bR, Integer bD1, Integer bD2, int c, float d) {
-        //si copiamos una ruta necesitamos su coste anterior, si es una ruta nueva coste empieza en cero
         Ruta rutaNueva = new Ruta(e1, e2, e3, bR, bD1, bD2, c, d);
-
-
-
         modificarCoste(rutaNueva);
         estaciones.put(e1, getBicisNext(e1) - bR);
-
         estaciones.put(e2, getBicisNext(e2) + bD1);
-
         estaciones.put(e3, getBicisNext(e3) + bD2);
-
         Rutas.add(rutaNueva);
     }
-
 
     /**************************/
     /****** MODIFICADORAS *****/
     /**************************/
 
-
     //Modificar coste amb l'operador canviar estacion inicial no te sentit
     public void modificarCoste(Ruta ruta) {
         coste -= ruta.getCosteRuta();
-
         distancia -= ruta.getDistanciaRuta();
-
-
         int d = distanciaEstaciones(ruta.getEstacionInicial(), ruta.getEstacionFinal1());
         if (ruta.getBicisDejadas2() != 0) {
             d += distanciaEstaciones(ruta.getEstacionFinal2(), ruta.getEstacionFinal1());
         }
         ruta.setDistanciaRuta(d);
         distancia += d;
-
         int c = 0;
-
         int bicicletasTransportadas = ruta.getBicisRecogidas() + ruta.getBicisDejadas1() + ruta.getBicisDejadas2();
         //if (getHeuristica() == 1) {
-            c += (((bicicletasTransportadas + 9) / 10) * d * 0.001);
+        //    c += (((bicicletasTransportadas + 9) / 10) * d * 0.001);
         //}
-
         //Nos beneficia dejar una bici en una estacion, mientras no se supere la demanda de bicis necesaria
         c -= min(ruta.getBicisDejadas1(), bicisNecesarias(ruta.getEstacionFinal1()));
-
         // si bicis dejadas 2 es 0 consideramos que no vamos a esa estacion
         if (ruta.getBicisDejadas2() != 0 && ruta.getEstacionFinal1() != ruta.getEstacionFinal2()) c -= min(ruta.getBicisDejadas2(), bicisNecesarias(ruta.getEstacionFinal2()));
-
         //Incrementa el coste por cada bici que recojamos por debajo de la demanda
         c += max(0, ruta.getBicisRecogidas() - bicisSobrantes(ruta.getEstacionInicial()));
-
-
-
         coste += c;
         ruta.setCosteRuta(c);
     }
@@ -395,10 +274,6 @@ public class BicingBoard {
         return max(0, getBicisNext(e) - e.getDemanda());
     }
 
-    //Distancia entre la estacion inicial y la estacion final 1
-
-    //APUNTAR A L'INFORME LA NOSTRA REPRESENTACIO DE ESTACIO FINAL 2
-
     public int distanciaRecorrida(final Ruta ruta) {
         int dis = distanciaEstaciones(ruta.getEstacionInicial(), ruta.getEstacionFinal1());
         if (ruta.getBicisRecogidas() - ruta.getBicisDejadas1() > 0) dis += distanciaEstaciones(ruta.getEstacionFinal1(), ruta.getEstacionFinal2());
@@ -409,15 +284,5 @@ public class BicingBoard {
     public int distanciaEstaciones(Estacion e1, Estacion e2) {
         return abs(e1.getCoordX() - e2.getCoordX()) + abs(e1.getCoordY() - e2.getCoordY());
 
-    }
-
-    public int getBicisMal() {
-        int valor = 0;
-        for (Ruta r1: Rutas) {
-            int aux = r1.getEstacionFinal1().getDemanda();
-            int aux2 = r1.nbicisDejadas1;
-            valor += aux2 - aux;
-        }
-        return min(0, valor);
     }
 }

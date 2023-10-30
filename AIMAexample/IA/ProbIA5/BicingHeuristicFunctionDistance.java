@@ -14,6 +14,4 @@ public class BicingHeuristicFunctionDistance implements HeuristicFunction {
         BicingBoard estado = (BicingBoard) n;
         return estado.getCoste()*estado.getDistancia()*0.001;
     }
-
-
 }

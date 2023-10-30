@@ -15,28 +15,24 @@ public class Main {
     public static void main(String[] args) throws Exception {
         int nbicis = 1250;
         int nestaciones = 25;
-        int demanda = 0;
-        int seed = 1;
+        int demanda = 1;
+        int seed = 1234;
         int nfurgos = 5;
-        int heuristic = 0;
+        int heuristic = 1;
         int estadoIni = 1;
 
 
         Estaciones e = new Estaciones(nestaciones, nbicis, demanda, seed);
         BicingBoard board = new BicingBoard(e, nbicis, nfurgos, estadoIni, heuristic);
 
-        if(heuristic == 0) {
+        if (heuristic == 0) {
             BicingHillClimbingSearch(board);
-            BicingSimulatedAnnealingSearch(board);
-
-
+            //BicingSimulatedAnnealingSearch(board);
         } else if (heuristic == 1) {
-          //  BicingHillClimbingSearchDistance(board);
+            BicingHillClimbingSearchDistance(board);
             //BicingSimulatedAnnealingSearchDistance(board);
         }
     }
-
-
     private static void BicingHillClimbingSearch(BicingBoard board) {
         System.out.println("\nBicing HillClimbing  -->");
         try {
