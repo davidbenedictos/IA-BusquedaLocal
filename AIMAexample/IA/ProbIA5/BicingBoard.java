@@ -123,6 +123,7 @@ public class BicingBoard {
     private int nfurgos;
     private ArrayList<Ruta> Rutas;
     private Map<Estacion, Integer> estaciones;
+    private ArrayList<Estacion> vectorEstaciones;
     private float coste;
     private float distancia;
 
@@ -139,6 +140,7 @@ public class BicingBoard {
 
     public BicingBoard(Estaciones e, int nb, int nf, int estadoIni, int h) {
         estaciones = new HashMap<Estacion, Integer>();
+        vectorEstaciones = e;
         nbicis = nb;
         nestaciones = e.size();
         nfurgos = nf;
@@ -155,9 +157,9 @@ public class BicingBoard {
         heuristica = h;
     }
 
-    public BicingBoard(Map<Estacion, Integer> e, int nb, int nf, ArrayList<Ruta> r, float c, float dist) {
+    public BicingBoard(Map<Estacion, Integer> e, ArrayList<Estacion> ve, int nb, int nf, ArrayList<Ruta> r, float c, float dist) {
         estaciones = new HashMap<>();
-
+        vectorEstaciones = ve;
         for (Map.Entry<Estacion, Integer> entry : e.entrySet()) {
             Estacion key = entry.getKey();
             Integer value = entry.getValue();
@@ -179,9 +181,9 @@ public class BicingBoard {
     }
 
     //Copia del pare amb totes les copies de rutes, excepte una que no s'afageix
-    public BicingBoard(Map<Estacion, Integer> e, int nb, int nf, ArrayList<Ruta> r, float c, float dist, Ruta noAñadir) {
+    public BicingBoard(Map<Estacion, Integer> e, ArrayList<Estacion> ve, int nb, int nf, ArrayList<Ruta> r, float c, float dist, Ruta noAñadir) {
         estaciones = new HashMap<>();
-
+        vectorEstaciones = ve;
         for (Map.Entry<Estacion, Integer> entry : e.entrySet()) {
             Estacion key = entry.getKey();
             Integer value = entry.getValue();
@@ -220,6 +222,7 @@ public class BicingBoard {
     public int getNFurgos() { return nfurgos; }
 
     public Map<Estacion, Integer> getEstaciones() { return estaciones; }
+    public ArrayList<Estacion> getVectorEstaciones() { return vectorEstaciones; }
 
     public ArrayList<Ruta> getRutas(){ return Rutas; }
     public float getCoste(){ return coste; }

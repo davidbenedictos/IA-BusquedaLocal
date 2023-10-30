@@ -26,8 +26,9 @@ public class Main {
         BicingBoard board = new BicingBoard(e, nbicis, nfurgos, estadoIni, heuristic);
 
         if(heuristic == 0) {
+            BicingSimulatedAnnealingSearch(board);
             BicingHillClimbingSearch(board);
-            //BicingSimulatedAnnealingSearch(board);
+
         } else if (heuristic == 1) {
             BicingHillClimbingSearchDistance(board);
             //BicingSimulatedAnnealingSearchDistance(board);
@@ -94,7 +95,7 @@ public class Main {
                     new BicingGoalTest(),
                     new BicingHeuristicFunction());
             System.out.println("Problem created");
-            Search search =  new SimulatedAnnealingSearch(25000,100,25,0.01);
+            Search search =  new SimulatedAnnealingSearch(100000,100,25,0.0001);
             SearchAgent agent = new SearchAgent(problem,search);
             System.out.println();
             printActions(agent.getActions());
